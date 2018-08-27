@@ -1,0 +1,7 @@
+# Compiled binaries
+/bin/*
+/build/*
+/docs/*
+!/bin/.gitkeep
+!/build/.gitkeep
+!/docs/.gitkeep
