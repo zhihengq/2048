@@ -23,23 +23,24 @@ class Grid {
      * The constructed grid will be all empty.
      * @param height the number of rows
      * @param width the number of columns
-     * @throws std::invalid_argument if `height` or `width` is zero
-     * @throws std::bad_alloc if memory allocation failed
+     * @throw std::invalid_argument if `height` or `width` is zero
+     * @throw std::bad_alloc if memory allocation failed
      */
     Grid(uint32_t height, uint32_t width);
 
     /**
      * Copy constructor
      * @param g the `Grid` to be copied
-     * @throws std::bad_alloc if memory allocation failed
-     * @throws std::runtime_error if `g` is not in a valid state
+     * @throw std::bad_alloc if memory allocation failed
+     * @throw std::runtime_error if `g` is not in a valid state
      */
     Grid(const Grid &g);
 
     /**
-     * Move constructor
+     * Move constructor.
+     * The original grid `g` will be unusable.
      * @param g the `Grid` to be moved
-     * @throws std::runtime_error if `g` is not in a valid state
+     * @throw std::runtime_error if `g` is not in a valid state
      */
     Grid(Grid &&g);
 
@@ -47,7 +48,7 @@ class Grid {
      * Equality
      * @param g the other `Grid` object
      * @return true if the two grids are identical, false otherwise
-     * @throws std::runtime_error if `this` or `g` is not in a valid state
+     * @throw std::runtime_error if `this` or `g` is not in a valid state
      */
     bool operator==(const Grid &g) const;
 
@@ -55,7 +56,7 @@ class Grid {
      * Inequality
      * @param g the other `Grid` object
      * @return false if the two grids are identical, true otherwise
-     * @throws std::runtime_error if `this` or `g` is not in a valid state
+     * @throw std::runtime_error if `this` or `g` is not in a valid state
      */
     bool operator!=(const Grid &g) const { return !(*this == g); }
 
@@ -66,7 +67,7 @@ class Grid {
      * @param c the col index
      * @return a reference to the tile
      * @throw std::out_of_range if `r` or `c` is out of range
-     * @throws std::runtime_error if this grid is not in a valid state
+     * @throw std::runtime_error if this grid is not in a valid state
      */
     const Tile &tile(uint32_t r, uint32_t c) const;
     Tile &tile(uint32_t r, uint32_t c);
@@ -89,6 +90,7 @@ class Grid {
  * Print the grid as a human-readable string.
  * @param os the output stream
  * @param g the `Grid` object
+ * @return `os`
  */
 std::ostream &operator<<(std::ostream &os, const Grid &g);
 

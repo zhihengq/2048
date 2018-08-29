@@ -48,6 +48,7 @@ class Tile {
 
     /**
      * Equality
+     * @param t the other `Tile`
      * @return true if the two tiles contain the same number or are both empty,
      *         false otherwise
      */
@@ -55,6 +56,7 @@ class Tile {
 
     /**
      * Inequality
+     * @param t the other `Tile`
      * @return false if the two tiles contain the same number or are both empty,
      *         true otherwise
      */
@@ -63,14 +65,14 @@ class Tile {
     /**
      * Doubles the number in this tile if this tile contains a number.
      * @return a copy of the original tile
-     * @throws std::logic_error if this tile is empty
+     * @throw std::logic_error if this tile is empty
      */
     Tile operator++(int);
 
     /**
      * Doubles the number in this tile if this tile contains a number.
      * @return *this
-     * @throws std::logic_error if this tile is empty
+     * @throw std::logic_error if this tile is empty
      */
     Tile &operator++();
 
@@ -82,6 +84,7 @@ class Tile {
  * Print the number in this tile.
  * @param os the output stream
  * @param t the `Tile` object
+ * @return `os`
  */
 std::ostream &operator<<(std::ostream &os, const Tile &t);
 
