@@ -8,10 +8,10 @@ CXXFLAGS += -I$(INCDIR) -Wall -std=c++17
 LDFLAGS += -fpic
 LDFLAGS_GTEST = `gtest-config --ldflags --libs` -lgtest_main
 
-_HEADERS = tile grid
+_HEADERS = tile grid game_state
 HEADERS = $(patsubst %,$(INCDIR)/%.h,$(_HEADERS))
 
-_OBJS = tile grid
+_OBJS = tile grid game_state
 OBJS = $(patsubst %,$(BUILDDIR)/%.o,$(_OBJS))
 
 _TESTS = tile grid
