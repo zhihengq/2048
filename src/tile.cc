@@ -5,6 +5,8 @@
 
 namespace _2048 {
 
+const Tile Tile::kEmpty(0);
+
 // post-increment
 Tile Tile::operator++(int) {
     if (empty())

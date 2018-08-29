@@ -12,6 +12,8 @@ namespace _2048 {
  */
 class Tile {
  public:
+    static const Tile kEmpty;  /**< Empty tile */
+
     /**
      * Copy constructor
      * @param t the `Tile` to be copied
