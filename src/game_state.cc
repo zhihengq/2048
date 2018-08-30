@@ -68,7 +68,7 @@ void GameState::GetPossibleDir(bool *left, bool *right,
                         up_possible = true;
                     }
                 } else {
-                    if (grid_.tile(r, c + 1).empty()) {
+                    if (grid_.tile(r + 1, c).empty()) {
                         // up occupied, down empty
                         down_possible = true;
                     } else {
