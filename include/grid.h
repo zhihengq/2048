@@ -40,9 +40,9 @@ class Grid {
      * Move constructor.
      * The original grid `g` will be unusable.
      * @param g the `Grid` to be moved
-     * @throw std::runtime_error if `g` is not in a valid state
      */
-    Grid(Grid &&g);
+    Grid(Grid &&g) noexcept
+            : height(g.height), width(g.width), grid_(std::move(g.grid_)) { }
 
     /**
      * Equality
@@ -83,7 +83,9 @@ class Grid {
      * @pre `r` and `c` are in range
      * @return the offset
      */
-    size_t offset(uint32_t r, uint32_t c) const { return r * width + c; }
+    size_t offset(uint32_t r, uint32_t c) const noexcept {
+        return r * width + c;
+    }
 };
 
 /**

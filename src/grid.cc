@@ -21,13 +21,6 @@ Grid::Grid(const Grid &g) : Grid(g.height, g.width) {
         grid_[i] = g.grid_[i];
 }
 
-// move constructor
-Grid::Grid(Grid &&g) : height(g.height), width(g.width) {
-    if (g.grid_ == nullptr)
-        throw std::runtime_error("invalid grid state");
-    grid_ = std::move(g.grid_);
-}
-
 // equality
 bool Grid::operator==(const Grid &g) const {
     if (grid_ == nullptr || g.grid_ == nullptr)

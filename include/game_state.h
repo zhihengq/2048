@@ -15,7 +15,7 @@ namespace _2048 {
 class GameState {
  public:
     friend std::ostream &operator<<(std::ostream &os, const GameState &g);
-    GameState &operator=(const GameState &g) = delete;
+    GameState &operator=(const GameState &) = delete;
 
     /**
      * A struct packing a row index and a col index.
@@ -23,9 +23,10 @@ class GameState {
     struct Position {
         uint32_t r;
         uint32_t c;
-        explicit Position(uint32_t r = 0, uint32_t c = 0) : r(r), c(c) { }
-        Position(const Position &p) : r(p.r), c(p.c) { }
-        bool operator==(const Position &p) const {
+        explicit constexpr Position(uint32_t r = 0, uint32_t c = 0) noexcept
+                : r(r), c(c) { }
+        constexpr Position(const Position &p) noexcept : r(p.r), c(p.c) { }
+        bool operator==(const Position &p) const noexcept {
             return r == p.r && c == p.c;
         }
     };
@@ -54,21 +55,20 @@ class GameState {
      * Move constructor.
      * The original game state `g` will be unusable.
      * @param g the `GameState` to be moved
-     * @throw std::runtime_error if `g` is not in a valid state
      */
-    GameState(GameState &&g) : grid_(std::move(g.grid_)) { }
+    GameState(GameState &&g) noexcept : grid_(std::move(g.grid_)) { }
 
     /**
      * Get game grid height.
      * @return the height
      */
-    uint32_t height() const { return grid_.height; }
+    uint32_t height() const noexcept { return grid_.height; }
 
     /**
      * Get game grid width.
      * @return the width
      */
-    uint32_t width() const { return grid_.width; }
+    uint32_t width() const noexcept { return grid_.width; }
 
     /**
      * Equality
@@ -133,7 +133,8 @@ class GameState {
 
  private:
     Grid grid_;  /**< Underlying grid */
-    void GetPossibleDir(bool *left, bool *right, bool *up, bool *down) const;
+    void GetPossibleDir(bool *left, bool *right,
+                        bool *up, bool *down) const;
 };
 
 /**

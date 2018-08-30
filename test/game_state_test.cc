@@ -60,7 +60,6 @@ TEST_F(GameStateTest, InvalidState) {
     GameState g(std::move(*g1_));
 
     EXPECT_THROW((GameState(*g1_)), std::runtime_error);
-    EXPECT_THROW(GameState(std::move(*g1_)), std::runtime_error);
     EXPECT_THROW(g == *g1_, std::runtime_error);
     EXPECT_THROW(*g1_ == g, std::runtime_error);
     EXPECT_THROW(g != *g1_, std::runtime_error);

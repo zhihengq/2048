@@ -18,33 +18,33 @@ class Tile {
      * Copy constructor
      * @param t the `Tile` to be copied
      */
-    Tile(const Tile &t) : power_(t.power_) { }
+    constexpr Tile(const Tile &t) noexcept : power_(t.power_) { }
 
     /**
      * Construct a `Tile` with a initial number.
      * If the initial number is 1 (power is 0), the tile will be empty.
      * @param power an exponent n such that the initial number is 2^n
      */
-    explicit Tile(uint8_t power = 0) : power_(power) { }
+    explicit constexpr Tile(uint8_t power = 0) noexcept : power_(power) { }
 
     /**
      * Copy assignment
      * @return `*this`
      */
-    Tile &operator=(const Tile &t) { power_ = t.power_; return *this; }
+    Tile &operator=(const Tile &t) noexcept { power_ = t.power_; return *this; }
 
     /**
      * Get the number in this tile in terms of power of 2.
      * @return the power n such that 2^n is the number in this tile,
      *          or 0 if this tile contains no number;
      */
-    uint8_t power() const { return power_; }
+    uint8_t power() const noexcept { return power_; }
 
     /**
      * Test whether this tile contains a number.
      * @return true if this tile is empty, false otherwise
      */
-    bool empty() const { return power() == 0; }
+    bool empty() const noexcept { return power_ == 0; }
 
     /**
      * Equality
@@ -52,7 +52,7 @@ class Tile {
      * @return true if the two tiles contain the same number or are both empty,
      *         false otherwise
      */
-    bool operator==(const Tile &t) const { return power() == t.power(); }
+    bool operator==(const Tile &t) const noexcept { return power_ == t.power_; }
 
     /**
      * Inequality
@@ -60,7 +60,7 @@ class Tile {
      * @return false if the two tiles contain the same number or are both empty,
      *         true otherwise
      */
-    bool operator!=(const Tile &t) const { return !(*this == t); }
+    bool operator!=(const Tile &t) const noexcept { return !(*this == t); }
 
     /**
      * Doubles the number in this tile if this tile contains a number.
