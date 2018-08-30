@@ -14,7 +14,7 @@ HEADERS = $(patsubst %,$(INCDIR)/%.h,$(_HEADERS))
 _OBJS = tile grid game_state
 OBJS = $(patsubst %,$(BUILDDIR)/%.o,$(_OBJS))
 
-_TESTS = tile grid
+_TESTS = tile grid game_state
 TESTS = $(patsubst %,$(BUILDDIR)/%_test.o,$(_TESTS))
 
 all: # empty
