@@ -46,6 +46,60 @@ class Game {
     }
 
     /**
+     * Get a pointer to the viewer.
+     * @return the viewer, or `nullptr` if there is none
+     */
+    Viewer *GetViewer() const noexcept { return viewer_; }
+
+    /**
+     * Set the viewer and return a pointer to the original viewer.
+     * If `viewer` is null, then there will be no more viewer in this game.
+     * @param viewer the new viewer
+     * @return the old viewer, or `nullptr` if there is none
+     */
+    Viewer *SetViewer(Viewer *viewer) noexcept {
+        Viewer *old_viewer = viewer_;
+        viewer_ = viewer;
+        return old_viewer;
+    }
+
+    /**
+     * Get a pointer to the tile generator.
+     * @return the generator, or `nullptr` if there is none
+     */
+    Generator *GetGenerator() const noexcept { return generator_; }
+
+    /**
+     * Set the generator and return a pointer to the original generator.
+     * If `generator` is null, then there will be no more generator in this game.
+     * @param generator the new generator
+     * @return the old generator, or `nullptr` if there is none
+     */
+    Generator *SetGenerator(Generator *generator) noexcept {
+        Generator *old_generator = generator_;
+        generator_ = generator;
+        return old_generator;
+    }
+
+    /**
+     * Get a pointer to the player.
+     * @return the player, or `nullptr` if there is none
+     */
+    Player *GetPlayer() const noexcept { return player_; }
+
+    /**
+     * Set the player and return a pointer to the original player.
+     * If `player` is null, then there will be no more player in this game.
+     * @param player the new player
+     * @return the old player, or `nullptr` if there is none
+     */
+    Player *SetPlayer(Player *player) noexcept {
+        Player *old_player = player_;
+        player_ = player;
+        return old_player;
+    }
+
+    /**
      * Let the generator generate a tile.
      * If there is no generator, the operation will fail.
      * If there is a viewer, it will be updated.
@@ -64,7 +118,7 @@ class Game {
     /**
      * Destructor
      */
-    virtual ~Game() { }
+    virtual ~Game();
 
  protected:
     GameState state_;

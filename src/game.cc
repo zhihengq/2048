@@ -33,4 +33,7 @@ bool Game::Play() {
     return success;
 }
 
+// destructor
+Game::~Game() { }
+
 }  // namespace _2048
