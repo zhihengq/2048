@@ -11,10 +11,10 @@ LDFLAGS_GTEST = `gtest-config --ldflags --libs` -lgtest_main
 _HEADERS = tile grid game_state game viewer/viewer generator/generator player/player
 HEADERS = $(patsubst %,$(INCDIR)/%.h,$(_HEADERS))
 
-_OBJS = tile grid game_state game
+_OBJS = tile grid game_state game viewer/viewer generator/generator player/player
 OBJS = $(patsubst %,$(BUILDDIR)/%.o,$(_OBJS))
 
-_TESTS = tile grid game_state
+_TESTS = tile grid game_state game
 TESTS = $(patsubst %,$(BUILDDIR)/%_test.o,$(_TESTS))
 
 all: # empty
