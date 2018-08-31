@@ -108,11 +108,11 @@ class GameState {
      * Generator side operation.
      * @param pos the position of the new tile
      * @param power number in the new tile in terms of power of 2
-     * @throw std::invalid_argument if the position is not empty
+     * @return true if the tile is generated, false if the position is not empty
      * @throw std::out_of_range if the position is out of range
      * @throw std::runtime_error if `this` is not in a valid state
      */
-    void GenerateTile(Position pos, uint8_t power);
+    bool GenerateTile(Position pos, uint8_t power);
 
     /**
      * Get the directions that can be moved in.

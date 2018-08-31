@@ -91,10 +91,10 @@ TEST_F(GameStateTest, GetEmptyTiles) {
 TEST_F(GameStateTest, GenerateTile) {
     EXPECT_THROW(g1_->GenerateTile(GameState::Position(2, 2), 1),
                  std::out_of_range);
-    EXPECT_THROW(g1_->GenerateTile(GameState::Position(0, 0), 1),
-                 std::invalid_argument);
+    EXPECT_FALSE(g1_->GenerateTile(GameState::Position(0, 0), 1));
+
     ASSERT_EQ(g2_->tile(GameState::Position(0, 2)).power(), 0);
-    g2_->GenerateTile(GameState::Position(0, 2), 11);
+    EXPECT_TRUE(g2_->GenerateTile(GameState::Position(0, 2), 11));
     EXPECT_EQ(g2_->tile(GameState::Position(0, 2)).power(), 11);
 }
 

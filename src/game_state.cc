@@ -16,11 +16,11 @@ std::vector<GameState::Position> GameState::GetEmptyTiles() const {
 }
 
 // generate tile
-void GameState::GenerateTile(GameState::Position pos, uint8_t power) {
+bool GameState::GenerateTile(GameState::Position pos, uint8_t power) {
     if (!tile(pos).empty())
-        throw std::invalid_argument(
-                "Cannot generate tiles on non-empty position");
+        return false;
     grid_.tile(pos.r, pos.c) = Tile(power);
+    return true;
 }
 
 // get possible move directions
