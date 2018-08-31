@@ -2,6 +2,7 @@
 #define _GAME_H_
 
 #include <cstdint>
+#include <memory>
 #include "game_state.h"
 #include "viewer/viewer.h"
 #include "generator/generator.h"
@@ -15,20 +16,16 @@ class Game {
     Game *operator=(const Game &) = delete;
 
     /**
-     * Construct a game instance of size `height` by `width`.
-     * @param height the height of the game grid
-     * @param width the width of the game grid
+     * Construct a game instance.
+     * The game will be unusable until being reset.
      * @param viewer the viewer of the game
      * @param generator the tile generator
      * @param player the game player
-     * @throw std::invalid_argument if the grid size is zero
      */
-    Game(uint32_t height, uint32_t width,
-         Viewer *viewer = nullptr,
-         Generator *generator = nullptr,
-         Player *player = nullptr)
-            : state_(height, width), viewer_(viewer),
-              generator_(generator), player_(player) { }
+    explicit Game(Viewer *viewer = nullptr,
+                  Generator *generator = nullptr,
+                  Player *player = nullptr) noexcept
+            : viewer_(viewer), generator_(generator), player_(player) { }
 
     /**
      * Move constructor.
@@ -100,10 +97,25 @@ class Game {
     }
 
     /**
+     * Reset the game to a specific state.
+     * @param state the game state
+     * @throw std::runtime_error if `state` is not in a valid state
+     */
+    virtual void Reset(const GameState &state);
+
+    /**
+     * Reset the game to a specific state.
+     * The original game state `state` will be unusable.
+     * @param state the game state
+     */
+    virtual void Reset(GameState &&state);
+
+    /**
      * Let the generator generate a tile.
      * If there is no generator, the operation will fail.
      * If there is a viewer, it will be updated.
      * @return true if successful, otherwise false
+     * @throw std::runtime_error if `this` is not in a valid state
      */
     virtual bool Generate();
 
@@ -112,6 +124,7 @@ class Game {
      * If there is no player, the operation will fail.
      * If there is a viewer, it will be updated.
      * @return true if successful, otherwise false
+     * @throw std::runtime_error if `this` is not in a valid state
      */
     virtual bool Play();
 
@@ -121,7 +134,7 @@ class Game {
     virtual ~Game();
 
  protected:
-    GameState state_;
+    std::unique_ptr<GameState> state_;
     Viewer    *viewer_;
     Generator *generator_;
     Player    *player_;
