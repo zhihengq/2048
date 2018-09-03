@@ -19,7 +19,7 @@ class Viewer {
     /**
      * Destructor
      */
-    virtual ~Viewer();
+    virtual ~Viewer() { }
 };
 
 }  // namespace _2048

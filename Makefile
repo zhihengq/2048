@@ -35,10 +35,7 @@ endef
 $(eval $(call BUILD_RULE, GAMELOGIC_OBJS, tile, tile))
 $(eval $(call BUILD_RULE, GAMELOGIC_OBJS, grid, tile grid))
 $(eval $(call BUILD_RULE, GAMELOGIC_OBJS, game_state, tile grid game_state))
-$(eval $(call BUILD_RULE, GAMELOGIC_OBJS, viewer/viewer, tile grid game_state viewer/viewer))
-$(eval $(call BUILD_RULE, GAMELOGIC_OBJS, generator/generator, tile grid game_state generator/generator))
-$(eval $(call BUILD_RULE, GAMELOGIC_OBJS, player/player, tile grid game_state player/player))
-$(eval $(call BUILD_RULE, GAMELOGIC_OBJS, game, tile grid game_state game viewer/viewer generator/generator player/player))
+$(eval $(call BUILD_RULE, GAMELOGIC_OBJS, game, tile grid game_state game viewer generator player))
 
 $(BINDIR)/libgamelogic.so: $(GAMELOGIC_OBJS)
 	$(CXX) $(LDFLAGS) -shared $^ -o $@

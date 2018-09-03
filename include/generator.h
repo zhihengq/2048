@@ -26,7 +26,7 @@ class Generator {
     /**
      * Destructor
      */
-    virtual ~Generator();
+    virtual ~Generator() { }
 };
 
 }  // namespace _2048

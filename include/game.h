@@ -4,9 +4,9 @@
 #include <cstdint>
 #include <memory>
 #include "game_state.h"
-#include "viewer/viewer.h"
-#include "generator/generator.h"
-#include "player/player.h"
+#include "viewer.h"
+#include "generator.h"
+#include "player.h"
 
 namespace _2048 {
 

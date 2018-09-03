@@ -4,9 +4,9 @@
 #include <sstream>
 #include <exception>
 #include "game_state.h"
-#include "viewer/viewer.h"
-#include "generator/generator.h"
-#include "player/player.h"
+#include "viewer.h"
+#include "generator.h"
+#include "player.h"
 #include "game.h"
 
 using _2048::Game;

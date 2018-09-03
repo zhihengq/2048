@@ -24,7 +24,7 @@ class Player {
     /**
      * Destructor
      */
-    virtual ~Player();
+    virtual ~Player() { }
 };
 
 }  // namespace _2048
