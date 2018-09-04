@@ -131,7 +131,7 @@ class Game {
     /**
      * Destructor
      */
-    virtual ~Game();
+    virtual ~Game() { }
 
  protected:
     std::unique_ptr<GameState> state_;
