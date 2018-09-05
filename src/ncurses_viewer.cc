@@ -116,14 +116,14 @@ inline void Draw(const GameState &state,
             for (uint32_t c = 0; c < state.width(); c++) {
                 for (uint8_t i = 0; i < max_width; i++)
                     addch(ACS_HLINE);
-                addch(c + 1 == state.width() ? ACS_BTEE : ACS_LRCORNER);
+                addch(c + 1 == state.width() ? ACS_LRCORNER : ACS_BTEE);
             }
         } else {
             addch(ACS_LTEE);
             for (uint32_t c = 0; c < state.width(); c++) {
                 for (uint8_t i = 0; i < max_width; i++)
                     addch(ACS_HLINE);
-                addch(c + 1 == state.width() ? ACS_PLUS : ACS_RTEE);
+                addch(c + 1 == state.width() ? ACS_RTEE : ACS_PLUS);
             }
         }
     }
