@@ -37,6 +37,8 @@ $(eval $(call BUILD_RULE, GAMELOGIC_OBJS, grid, tile grid))
 $(eval $(call BUILD_RULE, GAMELOGIC_OBJS, game_state, tile grid game_state))
 $(eval $(call BUILD_RULE, GAMELOGIC_OBJS, game, tile grid game_state game viewer generator player))
 
+$(eval $(call BUILD_RULE, VIEWER_OBJS, ncurses_viewer, ncurses_viewer tile grid game_state))
+
 $(BINDIR)/libgamelogic.so: $(GAMELOGIC_OBJS)
 	$(CXX) $(LDFLAGS) -shared $^ -o $@
 
