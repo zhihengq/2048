@@ -7,6 +7,9 @@
 
 namespace _2048 {
 
+/**
+ * A Ncurses based CLI viewer.
+ */
 class NcursesViewer : public Viewer {
  public:
     static NcursesViewer viewer;            /**< The NcursesViewer instance */
