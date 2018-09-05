@@ -1,5 +1,5 @@
-#ifndef _NCURSES_VIEW_H_
-#define _NCURSES_VIEW_H_
+#ifndef _NCURSES_VIEWER_H_
+#define _NCURSES_VIEWER_H_
 
 #include <memory>
 #include "game_state.h"
@@ -41,4 +41,4 @@ class NcursesViewer : public Viewer {
 
 }  // namespace _2048
 
-#endif  // _NCURSES_VIEW_H_
+#endif  // _NCURSES_VIEWER_H_

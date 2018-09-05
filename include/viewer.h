@@ -1,5 +1,5 @@
-#ifndef _VIEWER_VIEWER_H_
-#define _VIEWER_VIEWER_H_
+#ifndef _VIEWER_H_
+#define _VIEWER_H_
 
 #include "game_state.h"
 
@@ -24,4 +24,4 @@ class Viewer {
 
 }  // namespace _2048
 
-#endif  // _VIEWER_VIEWER_H_
+#endif  // _VIEWER_H_

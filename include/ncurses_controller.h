@@ -1,5 +1,5 @@
-#ifndef _NCURSES_CONTROL_H_
-#define _NCURSES_CONTROL_H_
+#ifndef _NCURSES_CONTROLLER_H_
+#define _NCURSES_CONTROLLER_H_
 
 #include <memory>
 #include <ncurses.h>
@@ -50,4 +50,4 @@ class NcursesController : public NcursesViewer, public Player {
 
 }  // namespace _2048
 
-#endif  // _NCURSES_CONTROL_H_
+#endif  // _NCURSES_CONTROLLER_H_

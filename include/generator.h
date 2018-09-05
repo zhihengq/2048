@@ -1,5 +1,5 @@
-#ifndef _GENERATOR_GENERATOR_H_
-#define _GENERATOR_GENERATOR_H_
+#ifndef _GENERATOR_H_
+#define _GENERATOR_H_
 
 #include <cstdint>
 #include "game_state.h"
@@ -31,4 +31,4 @@ class Generator {
 
 }  // namespace _2048
 
-#endif  // _GENERATOR_GENERATOR_H_
+#endif  // _GENERATOR_H_

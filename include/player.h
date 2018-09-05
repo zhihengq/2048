@@ -1,5 +1,5 @@
-#ifndef _PLAYER_PLAYER_H_
-#define _PLAYER_PLAYER_H_
+#ifndef _PLAYER_H_
+#define _PLAYER_H_
 
 #include <cstdint>
 #include "game_state.h"
@@ -29,4 +29,4 @@ class Player {
 
 }  // namespace _2048
 
-#endif  // _PLAYER_PLAYER_H_
+#endif  // _PLAYER_H_
