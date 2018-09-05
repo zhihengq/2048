@@ -57,7 +57,6 @@ void NcursesViewer::Update(const GameState &state) {
     uint32_t c = scr_width < std::get<1>(dim) ?
             0 : (scr_width - std::get<1>(dim)) / 2;
     Draw(*saved_state_, std::make_tuple(r, c), max_width);
-    move(0, 0);
 }
 
 inline uint8_t GetMaxWidth(const GameState &state) noexcept {
@@ -81,7 +80,7 @@ inline Coord2D GetDimension(uint32_t height, uint32_t width,
 
 inline void Draw(const GameState &state,
                  const Coord2D &v, uint8_t max_width) noexcept {
-    erase();
+    clear();
     for (uint32_t r = 0; r < state.height(); r++) {
         // draw upper boarder
         if (r == 0) {
