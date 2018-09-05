@@ -17,7 +17,6 @@ class NcursesViewer : public Viewer {
     void (*saved_handler_)(int);        /**< The original SIGWINCH handler */
     NcursesViewer() noexcept;                 /**< Default constructor */
     ~NcursesViewer() noexcept override;
-    void Refresh() noexcept;                  /**< Repaint the terminal */
     friend void ResizeHandler(int sig) noexcept;  /**< Handler for SIGWINCH */
 };
 

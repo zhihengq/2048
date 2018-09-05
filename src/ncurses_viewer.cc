@@ -22,7 +22,7 @@ NcursesViewer NcursesViewer::viewer;
 // resize handler
 void ResizeHandler(int sig) noexcept {
     NcursesViewer::viewer.saved_handler_(sig);
-    NcursesViewer::viewer.Refresh();
+    NcursesViewer::viewer.Update(*NcursesViewer::viewer.saved_state_);
 }
 
 // constructor
@@ -44,12 +44,8 @@ NcursesViewer::~NcursesViewer() noexcept {
 
 // update
 void NcursesViewer::Update(const GameState &state) {
-    saved_state_.reset(new GameState(state));
-    Refresh();
-}
-
-// refresh
-void NcursesViewer::Refresh() noexcept {
+    if (saved_state_.get() != &state)
+        saved_state_.reset(new GameState(state));
     unsigned int scr_height, scr_width;
     getmaxyx(stdscr, scr_height, scr_width);
     uint8_t max_width = GetMaxWidth(*saved_state_);
