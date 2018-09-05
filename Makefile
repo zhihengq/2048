@@ -10,7 +10,7 @@ override LDFLAGS += -L$(BINDIR) -fPIC
 
 all: $(BINDIR)/libgamelogic.so
 
-test: $(BINDIR)/test_suite
+test: $(BINDIR)/auto_tests $(BINDIR)/ncurses_viewer_test
 	LD_LIBRARY_PATH=$(BINDIR) $<
 
 docs: Doxyfile
@@ -37,7 +37,7 @@ $(eval $(call BUILD_RULE, GAMELOGIC_OBJS, grid, tile grid))
 $(eval $(call BUILD_RULE, GAMELOGIC_OBJS, game_state, tile grid game_state))
 $(eval $(call BUILD_RULE, GAMELOGIC_OBJS, game, tile grid game_state game viewer generator player))
 
-$(eval $(call BUILD_RULE, VIEWER_OBJS, ncurses_viewer, ncurses_viewer tile grid game_state))
+$(eval $(call BUILD_RULE, UI_OBJS, ncurses_viewer, ncurses_viewer tile grid game_state))
 
 $(BINDIR)/libgamelogic.so: $(GAMELOGIC_OBJS)
 	$(CXX) $(LDFLAGS) -shared $^ -o $@
@@ -45,9 +45,12 @@ $(BINDIR)/libgamelogic.so: $(GAMELOGIC_OBJS)
 
 # Tests
 
-$(BINDIR)/test_suite : $(patsubst %.cc,$(BUILDDIR)/%.o,$(wildcard $(TESTDIR)/*_test.cc)) | all
+$(BINDIR)/auto_tests : $(patsubst %,$(BUILDDIR)/$(TESTDIR)/%_test.o,tile grid game_state game) | $(BINDIR)/libgamelogic.so
 	$(CXX) $(LDFLAGS) -lgamelogic $(LDFLAGS_GTEST) $^ -o $@
 
-$(BUILDDIR)/$(TESTDIR)/%_test.o : $(TESTDIR)/%_test.cc $(BUILDDIR)/%.o
+$(BINDIR)/ncurses_viewer_test : $(BUILDDIR)/$(TESTDIR)/ncurses_viewer_test.o $(BUILDDIR)/ncurses_viewer.o | $(BINDIR)/libgamelogic.so
+	$(CXX) $(LDFLAGS) -lgamelogic -lncurses $^ -o $@
+
+$(BUILDDIR)/$(TESTDIR)/%_test.o : $(TESTDIR)/%_test.cc
 	@mkdir -p $(@D)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
