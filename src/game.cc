@@ -18,6 +18,12 @@ void Game::Reset(GameState &&state) {
         viewer_->Update(*state_);
 }
 
+bool Game::NoMoreMove() const {
+    if (state_ == nullptr)
+        throw std::runtime_error("invalid game state");
+    return state_->GetPossibleMoves().empty();
+}
+
 // generate
 bool Game::Generate() {
     if (state_ == nullptr)

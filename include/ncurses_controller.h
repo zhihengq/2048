@@ -34,7 +34,8 @@ class NcursesController : public NcursesViewer, public Player {
      */
     static NcursesController &instance() noexcept {
         if (instance_ == nullptr)
-            instance_.reset(new NcursesController(NcursesViewerResizeHandler));
+            instance_.reset(new NcursesController(
+                                NcursesControllerResizeHandler));
         return *instance_;
     }
 
@@ -46,6 +47,9 @@ class NcursesController : public NcursesViewer, public Player {
     /** Constructor */
     explicit NcursesController(void (*resize_handler)(int)) noexcept
             : NcursesViewer(resize_handler), last_key_(ERR) { }
+
+    /** Handler for SIGWINCH */
+    static void NcursesControllerResizeHandler(int sig) noexcept;
 };
 
 }  // namespace _2048

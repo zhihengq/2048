@@ -8,6 +8,13 @@ namespace _2048 {
 // instance
 std::unique_ptr<NcursesController> NcursesController::instance_;
 
+// resize handler
+void NcursesController::NcursesControllerResizeHandler(int sig) noexcept {
+    NcursesController &instance = NcursesController::instance();
+    instance.saved_handler_(sig);
+    instance.Update(*instance.saved_state_);
+}
+
 // play
 bool NcursesController::Play(const GameState &state,
                              GameState::Direction *move) {
