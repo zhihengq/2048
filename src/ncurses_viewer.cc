@@ -50,6 +50,8 @@ void NcursesViewer::Update(const GameState &state) {
     unsigned int scr_height, scr_width;
     getmaxyx(stdscr, scr_height, scr_width);
     uint8_t max_width = GetMaxWidth(*saved_state_);
+    if (max_width < 3)
+        max_width = 3;
     Coord2D dim = GetDimension(saved_state_->height(),
                                saved_state_->width(), max_width);
     uint32_t r = scr_height < std::get<0>(dim) ?
