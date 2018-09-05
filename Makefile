@@ -42,7 +42,7 @@ $(eval $(call BUILD_RULE, OTHER_OBJS, random_generator, tile grid game_state gen
 $(eval $(call BUILD_RULE, NCURSES_OBJS, ncurses_viewer, ncurses_viewer tile grid game_state))
 $(eval $(call BUILD_RULE, NCURSES_OBJS, ncurses_controller, ncurses_controller ncurses_viewer tile grid game_state))
 
-$(eval $(call BUILD_RULE, NCURSES_OBJS, 2048_ncurses, game ncurses_controller random_generator))
+$(eval $(call BUILD_RULE, OTHER_OBJS, 2048_ncurses, game ncurses_controller random_generator))
 
 $(BINDIR)/libgamelogic.so : $(GAMELOGIC_OBJS)
 	$(CXX) $(LDFLAGS) -shared $^ -o $@
