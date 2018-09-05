@@ -57,7 +57,7 @@ class Game {
     Viewer *SetViewer(Viewer *viewer) noexcept {
         Viewer *old_viewer = viewer_;
         viewer_ = viewer;
-        if (viewer_ != nullptr)
+        if (state_ != nullptr && viewer_ != nullptr)
             viewer_->Update(*state_);
         return old_viewer;
     }
