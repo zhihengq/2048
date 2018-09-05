@@ -117,6 +117,13 @@ class Game {
     virtual void Reset(GameState &&state);
 
     /**
+     * Check if the player has no more move.
+     * @return true if the player has no more move, false otherwise
+     * @throw std::runtime_error if `this` is not in a valid state
+     */
+    virtual bool NoMoreMove() const;
+
+    /**
      * Let the generator generate a tile.
      * If there is no generator, the operation will fail.
      * If there is a viewer, it will be updated.
