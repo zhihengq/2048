@@ -21,12 +21,14 @@ NcursesViewer NcursesViewer::viewer;
 
 // resize handler
 void ResizeHandler(int sig) noexcept {
+    NcursesViewer::viewer.saved_handler_(sig);
     NcursesViewer::viewer.Refresh();
 }
 
 // constructor
 NcursesViewer::NcursesViewer() noexcept {
     initscr();
+    curs_set(0);
     noecho();
     cbreak();
     keypad(stdscr, TRUE);
@@ -53,11 +55,12 @@ void NcursesViewer::Refresh() noexcept {
     uint8_t max_width = GetMaxWidth(*saved_state_);
     Coord2D dim = GetDimension(saved_state_->height(),
                                saved_state_->width(), max_width);
-    uint32_t r = std::get<0>(dim) < scr_height ?
+    uint32_t r = scr_height < std::get<0>(dim) ?
             0 : (scr_height - std::get<0>(dim)) / 2;
-    uint32_t c = std::get<1>(dim) < scr_width ?
+    uint32_t c = scr_width < std::get<1>(dim) ?
             0 : (scr_width - std::get<1>(dim)) / 2;
     Draw(*saved_state_, std::make_tuple(r, c), max_width);
+    move(0, 0);
 }
 
 inline uint8_t GetMaxWidth(const GameState &state) noexcept {
@@ -81,6 +84,7 @@ inline Coord2D GetDimension(uint32_t height, uint32_t width,
 
 inline void Draw(const GameState &state,
                  const Coord2D &v, uint8_t max_width) noexcept {
+    erase();
     for (uint32_t r = 0; r < state.height(); r++) {
         // draw upper boarder
         if (r == 0) {
@@ -97,9 +101,15 @@ inline void Draw(const GameState &state,
         move(std::get<0>(v) + r * 2 + 1, std::get<1>(v));
         addch(ACS_VLINE);
         for (uint32_t c = 0; c < state.width(); c++) {
-            std::ostringstream oss;
-            oss << std::setw(10) << state.tile(GameState::Position(r, c));
-            addstr(oss.str().c_str());
+            if (state.tile(GameState::Position(r, c)).empty()) {
+                for (uint8_t i = 0; i < max_width; i++)
+                    addch(' ');
+            } else {
+                std::ostringstream oss;
+                oss << std::setw(max_width)
+                        << state.tile(GameState::Position(r, c));
+                addstr(oss.str().c_str());
+            }
             addch(ACS_VLINE);
         }
 
@@ -121,6 +131,7 @@ inline void Draw(const GameState &state,
             }
         }
     }
+    refresh();
 }
 
 }  // namespace _2048
