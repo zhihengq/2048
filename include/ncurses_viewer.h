@@ -9,15 +9,16 @@ namespace _2048 {
 
 class NcursesViewer : public Viewer {
  public:
-    static NcursesViewer viewer;
+    static NcursesViewer viewer;            /**< The NcursesViewer instance */
     void Update(const GameState &state) override;
+
  private:
-    std::unique_ptr<GameState> saved_state_;
-    void (*saved_handler_)(int);
-    NcursesViewer() noexcept;
+    std::unique_ptr<GameState> saved_state_;  /**< The last updated state */
+    void (*saved_handler_)(int);        /**< The original SIGWINCH handler */
+    NcursesViewer() noexcept;                 /**< Default constructor */
     ~NcursesViewer() noexcept override;
-    void Refresh() noexcept;
-    friend void ResizeHandler(int sig) noexcept;
+    void Refresh() noexcept;                  /**< Repaint the terminal */
+    friend void ResizeHandler(int sig) noexcept;  /**< Handler for SIGWINCH */
 };
 
 }  // namespace _2048
