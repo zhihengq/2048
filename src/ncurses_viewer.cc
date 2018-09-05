@@ -17,28 +17,29 @@ inline void Draw(const GameState &state,
                  const Coord2D &v, uint8_t max_width) noexcept;
 
 // instance
-NcursesViewer NcursesViewer::viewer;
+std::unique_ptr<NcursesViewer> NcursesViewer::instance_;
 
 // resize handler
-void ResizeHandler(int sig) noexcept {
-    NcursesViewer::viewer.saved_handler_(sig);
-    NcursesViewer::viewer.Update(*NcursesViewer::viewer.saved_state_);
+void NcursesViewer::NcursesViewerResizeHandler(int sig) noexcept {
+    NcursesViewer &instance = NcursesViewer::instance();
+    instance.saved_handler_(sig);
+    instance.Update(*instance.saved_state_);
 }
 
 // constructor
-NcursesViewer::NcursesViewer() noexcept {
+NcursesViewer::NcursesViewer(void (*resize_handler)(int)) noexcept {
     initscr();
     curs_set(0);
     noecho();
     cbreak();
     keypad(stdscr, TRUE);
     attron(A_BOLD);
-    saved_handler_ = signal(SIGWINCH, ResizeHandler);
+    saved_handler_ = std::signal(SIGWINCH, resize_handler);
 }
 
 // destructor
 NcursesViewer::~NcursesViewer() noexcept {
-    signal(SIGWINCH, saved_handler_);
+    std::signal(SIGWINCH, saved_handler_);
     endwin();
 }
 

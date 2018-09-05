@@ -8,7 +8,7 @@
 using _2048::GameState;
 
 int main() {
-    _2048::Game game(&_2048::NcursesViewer::viewer);
+    _2048::Game game(&_2048::NcursesViewer::instance());
 
     // 2x2
     // [[2, 4 ],
