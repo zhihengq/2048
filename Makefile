@@ -10,7 +10,7 @@ override LDFLAGS += -L$(BINDIR) -fPIC
 
 all: $(BINDIR)/libgamelogic.so
 
-test: $(BINDIR)/auto_tests $(BINDIR)/ncurses_viewer_test
+test: $(BINDIR)/auto_tests $(BINDIR)/ncurses_test
 	LD_LIBRARY_PATH=$(BINDIR) $<
 
 docs: Doxyfile
@@ -49,7 +49,7 @@ $(BINDIR)/libgamelogic.so: $(GAMELOGIC_OBJS)
 $(BINDIR)/auto_tests : $(patsubst %,$(BUILDDIR)/$(TESTDIR)/%_test.o,tile grid game_state game) | $(BINDIR)/libgamelogic.so
 	$(CXX) $(LDFLAGS) -lgamelogic $(LDFLAGS_GTEST) $^ -o $@
 
-$(BINDIR)/ncurses_viewer_test : $(BUILDDIR)/$(TESTDIR)/ncurses_viewer_test.o $(BUILDDIR)/ncurses_viewer.o | $(BINDIR)/libgamelogic.so
+$(BINDIR)/ncurses_test : $(BUILDDIR)/$(TESTDIR)/ncurses_test.o $(BUILDDIR)/ncurses_viewer.o $(BUILDDIR)/ncurses_controller.o | $(BINDIR)/libgamelogic.so
 	$(CXX) $(LDFLAGS) -lgamelogic -lncurses $^ -o $@
 
 $(BUILDDIR)/$(TESTDIR)/%_test.o : $(TESTDIR)/%_test.cc
