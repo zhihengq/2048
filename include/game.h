@@ -10,6 +10,10 @@
 
 namespace _2048 {
 
+/**
+ * An instanceof the game.
+ * The game contains a game state, a viewer, a tile generator, and a player.
+ */
 class Game {
  public:
     Game(const Game &) = delete;
@@ -136,10 +140,10 @@ class Game {
     virtual ~Game() { }
 
  protected:
-    std::unique_ptr<GameState> state_;
-    Viewer    *viewer_;
-    Generator *generator_;
-    Player    *player_;
+    std::unique_ptr<GameState> state_;  /**< State of the game */
+    Viewer    *viewer_;                 /**< Viewer */
+    Generator *generator_;              /**< Generator */
+    Player    *player_;                 /**< Player */
 };
 
 }  // namespace _2048
