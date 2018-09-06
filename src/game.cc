@@ -1,6 +1,6 @@
-#include <exception>
-#include "game_state.h"
 #include "game.h"
+
+#include <stdexcept>
 
 namespace _2048 {
 

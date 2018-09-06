@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <memory>
+
 #include "tile.h"
 
 namespace _2048 {

@@ -1,13 +1,14 @@
+#include "ui/ncurses_viewer.h"
+
+#include <ncurses.h>
 #include <cstdint>
+#include <csignal>
 #include <tuple>
 #include <sstream>
 #include <iomanip>
-#include <csignal>
-#include <ncurses.h>
-#include "game_state.h"
-#include "ncurses_viewer.h"
 
 namespace _2048 {
+namespace ui {
 
 typedef std::tuple<uint32_t, uint32_t> Coord2D;
 inline uint8_t GetMaxWidth(const GameState &state) noexcept;
@@ -132,4 +133,5 @@ inline void Draw(const GameState &state,
     refresh();
 }
 
+}  // namespace ui
 }  // namespace _2048

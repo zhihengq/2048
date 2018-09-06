@@ -8,6 +8,9 @@ LDFLAGS_GTEST = `gtest-config --ldflags --libs` -lgtest_main
 override CXXFLAGS += -iquote $(INCDIR) -Wall -std=c++17 -fPIC
 override LDFLAGS += -L$(BINDIR) -fPIC
 
+
+### Phony Targets
+
 all: $(BINDIR)/2048_ncurses
 
 test: $(BINDIR)/auto_tests $(BINDIR)/ncurses_test
@@ -21,6 +24,9 @@ clean:
 
 .PHONY: all test docs clean
 
+
+### Build Rule
+
 # call BUILD_RULE,<group>,<src>,<headers>
 define BUILD_RULE =
 override $(strip $1) += $(BUILDDIR)/$(strip $2).o
@@ -30,28 +36,47 @@ $(BUILDDIR)/$(strip $2).o : $(SRCDIR)/$(strip $2).cc $(strip $(3:%=$(INCDIR)/%.h
 endef
 
 
-# Targets
+### Header Dependencies
 
-$(eval $(call BUILD_RULE, GAMELOGIC_OBJS, tile, tile))
-$(eval $(call BUILD_RULE, GAMELOGIC_OBJS, grid, tile grid))
-$(eval $(call BUILD_RULE, GAMELOGIC_OBJS, game_state, tile grid game_state))
-$(eval $(call BUILD_RULE, GAMELOGIC_OBJS, game, tile grid game_state game viewer generator player))
+H_ALL = tile grid game_state viewer generator player game ui/ncurses_viewer ui/ncurses_controller ai/random_generator
 
-$(eval $(call BUILD_RULE, OTHER_OBJS, random_generator, tile grid game_state generator random_generator))
+H_TILE = tile
+H_GRID = grid $(H_TILE)
+H_GAME_STATE = game_state $(H_TILE) $(H_GRID)
+H_VIEWER = viewer $(H_GAME_STATE)
+H_GENERATOR = generator $(H_GAME_STATE)
+H_PLAYER = player $(H_GAME_STATE)
+H_GAME = game $(H_GAME_STATE) $(H_VIEWER) $(H_GENERATOR) $(H_PLAYER)
+H_UI_NCURSES_VIEWER = ui/ncurses_viewer $(H_GAME_STATE) $(H_VIEWER)
+H_UI_NCURSES_CONTROLLER = ui/ncurses_controller $(H_GAME_STATE) $(H_PLAYER) $(H_UI_NCURSES_VIEWER)
+H_AI_RANDOM_GENERATOR = ai/random_generator $(H_GAME_STATE) $(H_GENERATOR)
 
-$(eval $(call BUILD_RULE, NCURSES_OBJS, ncurses_viewer, ncurses_viewer tile grid game_state))
-$(eval $(call BUILD_RULE, NCURSES_OBJS, ncurses_controller, ncurses_controller ncurses_viewer tile grid game_state))
 
-$(eval $(call BUILD_RULE, OTHER_OBJS, 2048_ncurses, game ncurses_controller random_generator))
+### Objects
+
+$(eval $(call BUILD_RULE, GAMELOGIC_OBJS, tile, $(H_TILE)))
+$(eval $(call BUILD_RULE, GAMELOGIC_OBJS, grid, $(H_GRID)))
+$(eval $(call BUILD_RULE, GAMELOGIC_OBJS, game_state, $(H_GAME_STATE)))
+$(eval $(call BUILD_RULE, GAMELOGIC_OBJS, game, $(H_GAME)))
+
+$(eval $(call BUILD_RULE, OTHER_OBJS, ai/random_generator, $(H_AI_RANDOM_GENERATOR)))
+
+$(eval $(call BUILD_RULE, NCURSES_OBJS, ui/ncurses_viewer, $(H_UI_NCURSES_VIEWER)))
+$(eval $(call BUILD_RULE, NCURSES_OBJS, ui/ncurses_controller, $(H_UI_NCURSES_CONTROLLER)))
+
+$(eval $(call BUILD_RULE, OTHER_OBJS, app/2048_ncurses, $(H_GAME) $(H_NCURSES_CONTROLLER) $(H_AI_RANDOM_GENERATOR)))
+
+
+### Executables
 
 $(BINDIR)/libgamelogic.so : $(GAMELOGIC_OBJS)
 	$(CXX) $(LDFLAGS) -shared $^ -o $@
 
-$(BINDIR)/2048_ncurses : $(NCURSES_OBJS) $(patsubst %,$(BUILDDIR)/%.o,2048_ncurses random_generator) | $(BINDIR)/libgamelogic.so
+$(BINDIR)/2048_ncurses : $(patsubst %,$(BUILDDIR)/%.o,app/2048_ncurses ai/random_generator) $(NCURSES_OBJS) | $(BINDIR)/libgamelogic.so
 	$(CXX) $(LDFLAGS) -lgamelogic -lncurses $^ -o $@
 
 
-# Tests
+### Tests
 
 $(BINDIR)/auto_tests : $(patsubst %,$(BUILDDIR)/$(TESTDIR)/%_test.o,tile grid game_state game) | $(BINDIR)/libgamelogic.so
 	$(CXX) $(LDFLAGS) -lgamelogic $(LDFLAGS_GTEST) $^ -o $@
@@ -59,6 +84,7 @@ $(BINDIR)/auto_tests : $(patsubst %,$(BUILDDIR)/$(TESTDIR)/%_test.o,tile grid ga
 $(BINDIR)/ncurses_test : $(BUILDDIR)/$(TESTDIR)/ncurses_test.o $(NCURSES_OBJS) | $(BINDIR)/libgamelogic.so
 	$(CXX) $(LDFLAGS) -lgamelogic -lncurses $^ -o $@
 
-$(BUILDDIR)/$(TESTDIR)/%_test.o : $(TESTDIR)/%_test.cc
+# rebuild all tests if API changes
+$(BUILDDIR)/$(TESTDIR)/%_test.o : $(TESTDIR)/%_test.cc $(H_ALL:%=$(INCDIR)/%.h)
 	@mkdir -p $(@D)
 	$(CXX) $(CXXFLAGS) -c $< -o $@

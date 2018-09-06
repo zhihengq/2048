@@ -4,15 +4,15 @@
 #include "game.h"
 #include "viewer.h"
 #include "player.h"
-#include "ncurses_viewer.h"
-#include "ncurses_controller.h"
+#include "ui/ncurses_viewer.h"
+#include "ui/ncurses_controller.h"
 
 using _2048::GameState;
 using _2048::Game;
 using _2048::Viewer;
 using _2048::Player;
-using _2048::NcursesViewer;
-using _2048::NcursesController;
+using _2048::ui::NcursesViewer;
+using _2048::ui::NcursesController;
 
 static void Usage(char *name) {
     std::cerr << "Usage: " << name

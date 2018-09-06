@@ -1,19 +1,23 @@
-#ifndef _NCURSES_CONTROLLER_H_
-#define _NCURSES_CONTROLLER_H_
+#ifndef _UI_NCURSES_CONTROLLER_H_
+#define _UI_NCURSES_CONTROLLER_H_
 
 #include <memory>
 #include <ncurses.h>
+
 #include "game_state.h"
-#include "ncurses_viewer.h"
 #include "player.h"
+#include "ui/ncurses_viewer.h"
 
 namespace _2048 {
+namespace ui {
 
 /**
  * A Ncurses based CLI viewer and controller.
  */
 class NcursesController : public NcursesViewer, public Player {
  public:
+    NcursesController(const NcursesController &) = delete;
+
     /**
      * Ask the user for a move.
      * The function will fail and return false if the user pressed a key other
@@ -52,6 +56,7 @@ class NcursesController : public NcursesViewer, public Player {
     static void NcursesControllerResizeHandler(int sig) noexcept;
 };
 
+}  // namespace ai
 }  // namespace _2048
 
-#endif  // _NCURSES_CONTROLLER_H_
+#endif  // _UI_NCURSES_CONTROLLER_H_
