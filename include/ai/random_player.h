@@ -1,15 +1,16 @@
-#ifndef _RANDOM_GENERATOR_H_
-#define _RANDOM_GENERATOR_H_
+#ifndef _AI_RANDOM_PLAYER_H_
+#define _AI_RANDOM_PLAYER_H_
 
 #include <cstdint>
 #include <random>
 #include <chrono>
 #include "game_state.h"
-#include "generator.h"
+#include "player.h"
 
 namespace _2048 {
+namespace ai {
 
-class RandomGenerator : public Generator {
+class RandomPlayer : public Player {
  public:
     RandomGenerator(const RandomGenerator &) = delete;
     RandomGenerator &operator=(const RandomGenerator &) = delete;
@@ -32,6 +33,7 @@ class RandomGenerator : public Generator {
     std::default_random_engine engine_;     /**< Random engine */
 };
 
+}  // namespace ai
 }  // namespace _2048
 
-#endif
+#endif  // _AI_RANDOM_PLAYER_H_

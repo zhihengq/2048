@@ -1,9 +1,10 @@
 #include <cstdint>
 #include <ncurses.h>
 #include "game_state.h"
-#include "ncurses_controller.h"
+#include "ui/ncurses_controller.h"
 
 namespace _2048 {
+namespace ui {
 
 // instance
 std::unique_ptr<NcursesController> NcursesController::instance_;
@@ -37,4 +38,5 @@ bool NcursesController::Play(const GameState &state,
     }
 }
 
+}  // namespace ui
 }  // namespace _2048

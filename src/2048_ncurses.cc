@@ -1,8 +1,8 @@
 #include <cstdint>
 #include <ncurses.h>
 #include "game.h"
-#include "ncurses_controller.h"
-#include "random_generator.h"
+#include "ui/ncurses_controller.h"
+#include "ai/random_generator.h"
 
 inline void init(_2048::Game &game) {
     game.Reset(_2048::GameState(4, 4));
@@ -25,8 +25,9 @@ bool ProcessMenu(int key, _2048::Game &game) {
 }
 
 int main() {
-    _2048::RandomGenerator generator;
-    _2048::NcursesController &control = _2048::NcursesController::instance();
+    _2048::ai::RandomGenerator generator;
+    _2048::ui::NcursesController &control =
+            _2048::ui::NcursesController::instance();
     _2048::Game game(&control, &generator, &control);
 
     init(game);

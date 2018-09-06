@@ -1,11 +1,12 @@
-#ifndef _NCURSES_VIEWER_H_
-#define _NCURSES_VIEWER_H_
+#ifndef _UI_NCURSES_VIEWER_H_
+#define _UI_NCURSES_VIEWER_H_
 
 #include <memory>
 #include "game_state.h"
 #include "viewer.h"
 
 namespace _2048 {
+namespace ui {
 
 /**
  * A Ncurses based CLI viewer.
@@ -41,6 +42,7 @@ class NcursesViewer : public Viewer {
     static void NcursesViewerResizeHandler(int sig) noexcept;
 };
 
+}  // namespace ui
 }  // namespace _2048
 
-#endif  // _NCURSES_VIEWER_H_
+#endif  // _UI_NCURSES_VIEWER_H_

@@ -37,17 +37,17 @@ $(eval $(call BUILD_RULE, GAMELOGIC_OBJS, grid, tile grid))
 $(eval $(call BUILD_RULE, GAMELOGIC_OBJS, game_state, tile grid game_state))
 $(eval $(call BUILD_RULE, GAMELOGIC_OBJS, game, tile grid game_state game viewer generator player))
 
-$(eval $(call BUILD_RULE, OTHER_OBJS, random_generator, tile grid game_state generator random_generator))
+$(eval $(call BUILD_RULE, OTHER_OBJS, ai/random_generator, tile grid game_state generator ai/random_generator))
 
-$(eval $(call BUILD_RULE, NCURSES_OBJS, ncurses_viewer, ncurses_viewer tile grid game_state))
-$(eval $(call BUILD_RULE, NCURSES_OBJS, ncurses_controller, ncurses_controller ncurses_viewer tile grid game_state))
+$(eval $(call BUILD_RULE, NCURSES_OBJS, ui/ncurses_viewer, tile grid game_state ui/ncurses_viewer))
+$(eval $(call BUILD_RULE, NCURSES_OBJS, ui/ncurses_controller, tile grid game_state ui/ncurses_viewer ui/ncurses_controller))
 
-$(eval $(call BUILD_RULE, OTHER_OBJS, 2048_ncurses, game ncurses_controller random_generator))
+$(eval $(call BUILD_RULE, OTHER_OBJS, 2048_ncurses, game ui/ncurses_controller ai/random_generator))
 
 $(BINDIR)/libgamelogic.so : $(GAMELOGIC_OBJS)
 	$(CXX) $(LDFLAGS) -shared $^ -o $@
 
-$(BINDIR)/2048_ncurses : $(NCURSES_OBJS) $(patsubst %,$(BUILDDIR)/%.o,2048_ncurses random_generator) | $(BINDIR)/libgamelogic.so
+$(BINDIR)/2048_ncurses : $(NCURSES_OBJS) $(patsubst %,$(BUILDDIR)/%.o,2048_ncurses ai/random_generator) | $(BINDIR)/libgamelogic.so
 	$(CXX) $(LDFLAGS) -lgamelogic -lncurses $^ -o $@
 
 
