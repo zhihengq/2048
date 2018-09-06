@@ -16,7 +16,7 @@ bool RandomGenerator::Generate(const GameState &state, GameState::Position *pos,
         *pos = choices[select];
     }
     if (power != nullptr) {
-        *power = std::uniform_int_distribution<uint8_t>(1, 2)(engine_);
+        *power = std::bernoulli_distribution(0.1)(engine_) ? 2 : 1;
     }
     return true;
 }
