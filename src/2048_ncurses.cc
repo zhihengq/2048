@@ -1,4 +1,6 @@
 #include <cstdint>
+#include <thread>
+#include <chrono>
 #include <ncurses.h>
 #include "game.h"
 #include "ncurses_controller.h"
@@ -39,6 +41,7 @@ int main() {
                 player_turn = false;
             else if (ProcessMenu(control.GetLastKey(), game))
                 return 0;
+            std::this_thread::sleep_for(std::chrono::milliseconds(200));
         } else {
             game.Generate();
             player_turn = true;
