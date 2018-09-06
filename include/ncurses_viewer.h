@@ -12,6 +12,8 @@ namespace _2048 {
  */
 class NcursesViewer : public Viewer {
  public:
+    NcursesViewer(const NcursesViewer &) = delete;
+
     ~NcursesViewer() noexcept override;
     void Update(const GameState &state) override;
 
