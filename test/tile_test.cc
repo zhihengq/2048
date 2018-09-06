@@ -1,7 +1,10 @@
+#include "tile.h"
+
 #include <gtest/gtest.h>
 #include <sstream>
-#include <exception>
-#include "tile.h"
+#include <stdexcept>
+
+namespace {
 
 class TileTest : public testing::Test {
  protected:
@@ -55,3 +58,5 @@ TEST_F(TileTest, Print) {
         EXPECT_EQ(oss.str(), "2048");
     }
 }
+
+}  // namespace

@@ -1,9 +1,13 @@
+#include "grid.h"
+
 #include <gtest/gtest.h>
 #include <memory>
 #include <sstream>
-#include <exception>
+#include <stdexcept>
+
 #include "tile.h"
-#include "grid.h"
+
+namespace {
 
 using _2048::Grid;
 using _2048::Tile;
@@ -94,3 +98,5 @@ TEST_F(GridTest, Print) {
         EXPECT_EQ(oss.str(), "[[,2,,4],[,2,,],[8,4,4,],[2048,64,32,]]");
     }
 }
+
+}  // namespace

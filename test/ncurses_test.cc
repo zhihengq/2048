@@ -1,11 +1,15 @@
+#include "ui/ncurses_viewer.h"
+#include "ui/ncurses_controller.h"
+
 #include <iostream>
 #include <string>
+
 #include "game_state.h"
 #include "game.h"
 #include "viewer.h"
 #include "player.h"
-#include "ui/ncurses_viewer.h"
-#include "ui/ncurses_controller.h"
+
+namespace {
 
 using _2048::GameState;
 using _2048::Game;
@@ -38,6 +42,8 @@ static void User(Game &game, const Viewer &view, ViewerType type) {
             }
     }
 }
+
+}  // namespace
 
 int main(int argc, char **argv) {
     if (argc < 2) {

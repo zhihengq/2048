@@ -1,9 +1,13 @@
+#include "game_state.h"
+
 #include <gtest/gtest.h>
 #include <memory>
 #include <sstream>
-#include <exception>
+#include <stdexcept>
+
 #include "tile.h"
-#include "game_state.h"
+
+namespace {
 
 using _2048::GameState;
 
@@ -210,3 +214,5 @@ TEST_F(GameStateTest, Print) {
         EXPECT_EQ(oss.str(), "[[,2,,4],[,2,,],[8,4,4,],[2048,64,32,]]");
     }
 }
+
+}  // namespace

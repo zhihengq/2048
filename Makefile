@@ -13,7 +13,7 @@ override LDFLAGS += -L$(BINDIR) -fPIC
 
 all: $(BINDIR)/2048_ncurses
 
-test: $(BINDIR)/auto_tests $(BINDIR)/ncurses_test
+test: $(patsubst %,$(BINDIR)/$(TESTDIR)/%, auto_tests ncurses_test)
 	LD_LIBRARY_PATH=$(BINDIR) $<
 
 docs: Doxyfile
@@ -78,10 +78,12 @@ $(BINDIR)/2048_ncurses : $(patsubst %,$(BUILDDIR)/%.o,app/2048_ncurses ai/random
 
 ### Tests
 
-$(BINDIR)/auto_tests : $(patsubst %,$(BUILDDIR)/$(TESTDIR)/%_test.o,tile grid game_state game) | $(BINDIR)/libgamelogic.so
+$(BINDIR)/$(TESTDIR)/auto_tests : $(patsubst %,$(BUILDDIR)/$(TESTDIR)/%_test.o,tile grid game_state game) | $(BINDIR)/libgamelogic.so
+	@mkdir -p $(@D)
 	$(CXX) $(LDFLAGS) -lgamelogic $(LDFLAGS_GTEST) $^ -o $@
 
-$(BINDIR)/ncurses_test : $(BUILDDIR)/$(TESTDIR)/ncurses_test.o $(NCURSES_OBJS) | $(BINDIR)/libgamelogic.so
+$(BINDIR)/$(TESTDIR)/ncurses_test : $(BUILDDIR)/$(TESTDIR)/ncurses_test.o $(NCURSES_OBJS) | $(BINDIR)/libgamelogic.so
+	@mkdir -p $(@D)
 	$(CXX) $(LDFLAGS) -lgamelogic -lncurses $^ -o $@
 
 # rebuild all tests if API changes

@@ -1,13 +1,17 @@
+#include "game.h"
+
 #include <gtest/gtest.h>
 #include <cstdint>
 #include <memory>
 #include <sstream>
-#include <exception>
+#include <stdexcept>
+
 #include "game_state.h"
 #include "viewer.h"
 #include "generator.h"
 #include "player.h"
-#include "game.h"
+
+namespace {
 
 using _2048::Game;
 using _2048::GameState;
@@ -196,3 +200,5 @@ TEST_F(GameTest, Play) {
     ASSERT_NE(view2_.state_, nullptr);
     EXPECT_EQ(*view2_.state_, s2);
 }
+
+}  // namespace
