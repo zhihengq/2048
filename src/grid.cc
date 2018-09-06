@@ -1,8 +1,9 @@
+#include "grid.h"
+
 #include <cstdint>
 #include <memory>
 #include <ostream>
-#include <exception>
-#include "grid.h"
+#include <stdexcept>
 
 namespace _2048 {
 

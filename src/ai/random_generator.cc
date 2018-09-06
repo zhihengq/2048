@@ -1,6 +1,6 @@
-#include <cstdint>
-#include "game_state.h"
 #include "ai/random_generator.h"
+
+#include <cstdint>
 
 namespace _2048 {
 namespace ai {

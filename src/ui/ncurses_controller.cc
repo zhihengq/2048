@@ -1,7 +1,7 @@
-#include <cstdint>
-#include <ncurses.h>
-#include "game_state.h"
 #include "ui/ncurses_controller.h"
+
+#include <ncurses.h>
+#include <cstdint>
 
 namespace _2048 {
 namespace ui {

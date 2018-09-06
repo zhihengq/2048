@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <ncurses.h>
+
 #include "game_state.h"
 #include "player.h"
 #include "ui/ncurses_viewer.h"

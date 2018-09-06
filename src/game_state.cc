@@ -1,7 +1,7 @@
+#include "game_state.h"
+
 #include <cstdint>
 #include <vector>
-#include "tile.h"
-#include "game_state.h"
 
 namespace _2048 {
 

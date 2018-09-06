@@ -2,6 +2,7 @@
 #define _GENERATOR_H_
 
 #include <cstdint>
+
 #include "game_state.h"
 
 namespace _2048 {

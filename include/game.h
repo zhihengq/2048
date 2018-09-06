@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <memory>
+
 #include "game_state.h"
 #include "viewer.h"
 #include "generator.h"

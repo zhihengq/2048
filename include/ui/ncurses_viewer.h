@@ -2,6 +2,7 @@
 #define _UI_NCURSES_VIEWER_H_
 
 #include <memory>
+
 #include "game_state.h"
 #include "viewer.h"
 

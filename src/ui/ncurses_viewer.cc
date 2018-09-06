@@ -1,11 +1,11 @@
+#include "ui/ncurses_viewer.h"
+
+#include <ncurses.h>
 #include <cstdint>
+#include <csignal>
 #include <tuple>
 #include <sstream>
 #include <iomanip>
-#include <csignal>
-#include <ncurses.h>
-#include "game_state.h"
-#include "ui/ncurses_viewer.h"
 
 namespace _2048 {
 namespace ui {

@@ -1,7 +1,8 @@
+#include "tile.h"
+
 #include <cstdint>
 #include <ostream>
-#include <exception>
-#include "tile.h"
+#include <stdexcept>
 
 namespace _2048 {
 

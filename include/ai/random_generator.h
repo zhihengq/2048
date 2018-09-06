@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <random>
 #include <chrono>
+
 #include "game_state.h"
 #include "generator.h"
 

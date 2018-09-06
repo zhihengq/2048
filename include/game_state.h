@@ -2,8 +2,9 @@
 #define _GAME_STATE_H_
 
 #include <cstdint>
-#include <ostream>
 #include <vector>
+#include <ostream>
+
 #include "tile.h"
 #include "grid.h"
 
