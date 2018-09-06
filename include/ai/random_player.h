@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <random>
 #include <chrono>
-#include "game_state.h"
+
 #include "player.h"
 
 namespace _2048 {
@@ -12,22 +12,21 @@ namespace ai {
 
 class RandomPlayer : public Player {
  public:
-    RandomGenerator(const RandomGenerator &) = delete;
-    RandomGenerator &operator=(const RandomGenerator &) = delete;
+    RandomPlayer(const RandomPlayer &) = delete;
+    RandomPlayer &operator=(const RandomPlayer &) = delete;
 
     /**
-     * Construct a RandomGenerator and use system time as seed.
+     * Construct a RandomPlayer and use system time as seed.
      */
-    RandomGenerator() : engine_(
+    RandomPlayer() : engine_(
             std::chrono::system_clock::now().time_since_epoch().count()) { }
 
     /**
-     * Construct a RandomGenerator with the specified seed.
+     * Construct a RandomPlayer with the specified seed.
      */
-    explicit RandomGenerator(uint64_t seed) : engine_(seed) { }
+    explicit RandomPlayer(uint64_t seed) : engine_(seed) { }
 
-    bool Generate(const GameState &state, GameState::Position *pos,
-                  uint8_t *power) override;
+    bool Play(const GameState &state, GameState::Direction *move) override;
 
  private:
     std::default_random_engine engine_;     /**< Random engine */

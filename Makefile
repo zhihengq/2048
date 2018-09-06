@@ -49,7 +49,8 @@ H_PLAYER = player $(H_GAME_STATE)
 H_GAME = game $(H_GAME_STATE) $(H_VIEWER) $(H_GENERATOR) $(H_PLAYER)
 H_UI_NCURSES_VIEWER = ui/ncurses_viewer $(H_GAME_STATE) $(H_VIEWER)
 H_UI_NCURSES_CONTROLLER = ui/ncurses_controller $(H_GAME_STATE) $(H_PLAYER) $(H_UI_NCURSES_VIEWER)
-H_AI_RANDOM_GENERATOR = ai/random_generator $(H_GAME_STATE) $(H_GENERATOR)
+H_AI_RANDOM_GENERATOR = ai/random_generator $(H_GENERATOR)
+H_AI_RANDOM_PLAYER = ai/random_player $(H_PLAYER)
 
 
 ### Objects
@@ -60,6 +61,7 @@ $(eval $(call BUILD_RULE, GAMELOGIC_OBJS, game_state, $(H_GAME_STATE)))
 $(eval $(call BUILD_RULE, GAMELOGIC_OBJS, game, $(H_GAME)))
 
 $(eval $(call BUILD_RULE, OTHER_OBJS, ai/random_generator, $(H_AI_RANDOM_GENERATOR)))
+$(eval $(call BUILD_RULE, OTHER_OBJS, ai/random_player, $(H_AI_RANDOM_PLAYER)))
 
 $(eval $(call BUILD_RULE, NCURSES_OBJS, ui/ncurses_viewer, $(H_UI_NCURSES_VIEWER)))
 $(eval $(call BUILD_RULE, NCURSES_OBJS, ui/ncurses_controller, $(H_UI_NCURSES_CONTROLLER)))
