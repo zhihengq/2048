@@ -14,6 +14,8 @@ namespace _2048 {
  */
 class NcursesController : public NcursesViewer, public Player {
  public:
+    NcursesController(const NcursesController &) = delete;
+
     /**
      * Ask the user for a move.
      * The function will fail and return false if the user pressed a key other
