@@ -11,24 +11,24 @@ namespace _2048 {
 namespace ui {
 
 typedef std::tuple<uint32_t, uint32_t> Coord2D;
-inline uint8_t GetMaxWidth(const GameState &state) noexcept;
-inline Coord2D GetDimension(uint32_t height, uint32_t width,
-                            uint8_t max_width) noexcept;
-inline void Draw(const GameState &state,
-                 const Coord2D &v, uint8_t max_width) noexcept;
 
 // instance
 std::unique_ptr<NcursesViewer> NcursesViewer::instance_;
 
 // resize handler
 void NcursesViewer::NcursesViewerResizeHandler(int sig) noexcept {
+    // the instance will always be ready to use
+    // cannot cause data race
     NcursesViewer &instance = NcursesViewer::instance();
+    // the original handler cannot cause race condition
     instance.saved_handler_(sig);
-    instance.Update(*instance.saved_state_);
+    // Redraw is synchronized
+    instance.Redraw();
 }
 
 // constructor
-NcursesViewer::NcursesViewer(void (*resize_handler)(int)) noexcept {
+NcursesViewer::NcursesViewer(void (*resize_handler)(int)) noexcept
+        : redrawing_(false) {
     initscr();
     curs_set(0);
     noecho();
@@ -46,24 +46,14 @@ NcursesViewer::~NcursesViewer() noexcept {
 
 // update
 void NcursesViewer::Update(const GameState &state) {
-    if (saved_state_.get() != &state)
-        saved_state_.reset(new GameState(state));
-    unsigned int scr_height, scr_width;
-    getmaxyx(stdscr, scr_height, scr_width);
-    uint8_t max_width = GetMaxWidth(*saved_state_);
-    if (max_width < 3)
-        max_width = 3;
-    Coord2D dim = GetDimension(saved_state_->height(),
-                               saved_state_->width(), max_width);
-    uint32_t r = scr_height < std::get<0>(dim) ?
-            0 : (scr_height - std::get<0>(dim)) / 2;
-    uint32_t c = scr_width < std::get<1>(dim) ?
-            0 : (scr_width - std::get<1>(dim)) / 2;
-    Draw(*saved_state_, std::make_tuple(r, c), max_width);
+    saved_state_.reset(new GameState(state));
+    Redraw();
 }
 
+namespace {
+
 inline uint8_t GetMaxWidth(const GameState &state) noexcept {
-    uint8_t max = 0;
+    uint8_t max = 3;
     for (uint32_t r = 0; r < state.height(); r++)
         for (uint32_t c = 0; c < state.width(); c++) {
             // width = log_10(2^power) = power * log_10(2)
@@ -81,52 +71,83 @@ inline Coord2D GetDimension(uint32_t height, uint32_t width,
     return std::make_tuple(height * 2 + 1, width * (max_width + 1) + 1);
 }
 
-inline void Draw(const GameState &state,
-                 const Coord2D &v, uint8_t max_width) noexcept {
+// a simple lock guard for a bool flag
+class bool_lock_guard {
+ public:
+    explicit bool_lock_guard(bool &lock) : lock_(lock) {
+        lock_ = true;
+    }
+    ~bool_lock_guard() {
+        lock_ = false;
+    }
+ private:
+    bool &lock_;
+};
+
+}  // namespace
+
+void NcursesViewer::Redraw() noexcept {
+    // synchronize
+    if (redrawing_)
+        return;
+    bool_lock_guard lock(redrawing_);
+
+    // calculate size parameters
+    unsigned int scr_height, scr_width;
+    getmaxyx(stdscr, scr_height, scr_width);
+    uint8_t max_width = GetMaxWidth(*saved_state_);
+    Coord2D dim = GetDimension(saved_state_->height(),
+                               saved_state_->width(), max_width);
+    uint32_t top = scr_height < std::get<0>(dim) ?
+            0 : (scr_height - std::get<0>(dim)) / 2;
+    uint32_t left = scr_width < std::get<1>(dim) ?
+            0 : (scr_width - std::get<1>(dim)) / 2;
+
+    // actuate
     clear();
-    for (uint32_t r = 0; r < state.height(); r++) {
+    for (uint32_t r = 0; r < saved_state_->height(); r++) {
         // draw upper boarder
         if (r == 0) {
-            move(std::get<0>(v), std::get<1>(v));
+            move(top, left);
             addch(ACS_ULCORNER);
-            for (uint32_t c = 0; c < state.width(); c++) {
+            for (uint32_t c = 0; c < saved_state_->width(); c++) {
                 for (uint8_t i = 0; i < max_width; i++)
                     addch(ACS_HLINE);
-                addch(c + 1 == state.width() ? ACS_URCORNER : ACS_TTEE);
+                addch(c + 1 == saved_state_->width() ? ACS_URCORNER : ACS_TTEE);
             }
         }
 
         // draw content
-        move(std::get<0>(v) + r * 2 + 1, std::get<1>(v));
+        move(top + r * 2 + 1, left);
         addch(ACS_VLINE);
-        for (uint32_t c = 0; c < state.width(); c++) {
-            if (state.tile(GameState::Position(r, c)).empty()) {
+        for (uint32_t c = 0; c < saved_state_->width(); c++) {
+            if (saved_state_->tile(GameState::Position(r, c)).empty()) {
                 for (uint8_t i = 0; i < max_width; i++)
                     addch(' ');
             } else {
                 std::ostringstream oss;
                 oss << std::setw(max_width)
-                        << state.tile(GameState::Position(r, c));
+                        << saved_state_->tile(GameState::Position(r, c));
                 addstr(oss.str().c_str());
             }
             addch(ACS_VLINE);
         }
 
         // draw lower line
-        move(std::get<0>(v) + r * 2 + 2, std::get<1>(v));
-        if (r + 1 == state.height()) {
+        move(top + r * 2 + 2, left);
+        if (r + 1 == saved_state_->height()) {
             addch(ACS_LLCORNER);
-            for (uint32_t c = 0; c < state.width(); c++) {
+            for (uint32_t c = 0; c < saved_state_->width(); c++) {
                 for (uint8_t i = 0; i < max_width; i++)
                     addch(ACS_HLINE);
-                addch(c + 1 == state.width() ? ACS_LRCORNER : ACS_BTEE);
+                addch(c + 1 == saved_state_->width() ? ACS_LRCORNER : ACS_BTEE);
             }
         } else {
             addch(ACS_LTEE);
-            for (uint32_t c = 0; c < state.width(); c++) {
+            for (uint32_t c = 0; c < saved_state_->width(); c++) {
                 for (uint8_t i = 0; i < max_width; i++)
                     addch(ACS_HLINE);
-                addch(c + 1 == state.width() ? ACS_RTEE : ACS_PLUS);
+                addch(c + 1 == saved_state_->width() ? ACS_RTEE : ACS_PLUS);
             }
         }
     }

@@ -13,7 +13,7 @@ std::unique_ptr<NcursesController> NcursesController::instance_;
 void NcursesController::NcursesControllerResizeHandler(int sig) noexcept {
     NcursesController &instance = NcursesController::instance();
     instance.saved_handler_(sig);
-    instance.Update(*instance.saved_state_);
+    instance.Redraw();
 }
 
 // play

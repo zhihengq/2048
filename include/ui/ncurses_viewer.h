@@ -35,12 +35,16 @@ class NcursesViewer : public Viewer {
 
     std::unique_ptr<GameState> saved_state_;    /**< The last updated state */
     void (*saved_handler_)(int);        /**< The original SIGWINCH handler */
+    bool redrawing_;                            /**< Locked during redrawing */
 
     /** Constructor */
     explicit NcursesViewer(void (*resize_handler)(int)) noexcept;
 
     /** Handler for SIGWINCH */
     static void NcursesViewerResizeHandler(int sig) noexcept;
+
+    /** Redraw the screen */
+    virtual void Redraw() noexcept;
 };
 
 }  // namespace ui
