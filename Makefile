@@ -11,7 +11,7 @@ override LDFLAGS += -L$(BINDIR) -fPIC
 
 ### Phony Targets
 
-all: $(BINDIR)/2048_ncurses
+all: $(patsubst %,$(BINDIR)/%, 2048_ncurses 2048_ncurses_random)
 
 test: $(patsubst %,$(BINDIR)/$(TESTDIR)/%, auto_tests ncurses_test)
 	LD_LIBRARY_PATH=$(BINDIR) $<
@@ -67,6 +67,7 @@ $(eval $(call BUILD_RULE, NCURSES_OBJS, ui/ncurses_viewer, $(H_UI_NCURSES_VIEWER
 $(eval $(call BUILD_RULE, NCURSES_OBJS, ui/ncurses_controller, $(H_UI_NCURSES_CONTROLLER)))
 
 $(eval $(call BUILD_RULE, OTHER_OBJS, app/2048_ncurses, $(H_GAME) $(H_NCURSES_CONTROLLER) $(H_AI_RANDOM_GENERATOR)))
+$(eval $(call BUILD_RULE, OTHER_OBJS, app/2048_ncurses_random, $(H_GAME) $(H_NCURSES_VIEWER) $(H_AI_RANDOM_GENERATOR) $(H_AI_RANDOM_PLAYER)))
 
 
 ### Executables
@@ -75,6 +76,9 @@ $(BINDIR)/libgamelogic.so : $(GAMELOGIC_OBJS)
 	$(CXX) $(LDFLAGS) -shared $^ -o $@
 
 $(BINDIR)/2048_ncurses : $(patsubst %,$(BUILDDIR)/%.o,app/2048_ncurses ai/random_generator) $(NCURSES_OBJS) | $(BINDIR)/libgamelogic.so
+	$(CXX) $(LDFLAGS) -lgamelogic -lncurses $^ -o $@
+
+$(BINDIR)/2048_ncurses_random : $(patsubst %,$(BUILDDIR)/%.o,app/2048_ncurses_random ui/ncurses_viewer ai/random_generator ai/random_player) | $(BINDIR)/libgamelogic.so
 	$(CXX) $(LDFLAGS) -lgamelogic -lncurses $^ -o $@
 
 
