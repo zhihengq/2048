@@ -84,7 +84,7 @@ $(BINDIR)/2048_ncurses_random : $(patsubst %,$(BUILDDIR)/%.o,app/2048_ncurses_ra
 
 ### Tests
 
-$(BINDIR)/$(TESTDIR)/auto_tests : $(patsubst %,$(BUILDDIR)/$(TESTDIR)/%_test.o,tile grid game_state game) | $(BINDIR)/libgamelogic.so
+$(BINDIR)/$(TESTDIR)/auto_tests : $(patsubst %,$(BUILDDIR)/$(TESTDIR)/%_test.o,tile grid game_state game evaluation_function) | $(BINDIR)/libgamelogic.so
 	@mkdir -p $(@D)
 	$(CXX) $(LDFLAGS) -lgamelogic $(LDFLAGS_GTEST) $^ -o $@
 
