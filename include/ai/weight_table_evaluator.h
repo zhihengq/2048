@@ -2,6 +2,7 @@
 #define _AI_WEIGHT_TABLE_EVALUATOR_H_
 
 #include <cstdint>
+
 #include "ai/evaluation_function.h"
 
 namespace _2048 {
@@ -12,7 +13,7 @@ namespace ai {
  *
  * The value is calculated by adding tile values times their position weights.
  */
-class WeightTableEvaluator : EvaluationFunction {
+class WeightTableEvaluator : public EvaluationFunction {
  public:
     WeightTableEvaluator() = delete;
     WeightTableEvaluator &operator=(const WeightTableEvaluator &) = delete;
@@ -32,8 +33,6 @@ class WeightTableEvaluator : EvaluationFunction {
     int64_t operator()(const GameState &state) override;
 
  protected:
-    const int64_t *const weights_;
-
     /**
      * Constructor
      * The weight table must be at least `height` * `width`
@@ -43,7 +42,13 @@ class WeightTableEvaluator : EvaluationFunction {
      * @throw std::invalid_argument if the size of the weight table is 0
      * @throw std::invalid_argument if `weights` is `nullptr`
      */
-    WeightTableEvaluator(uint32_t height, uint32_t width, int64_t *weights);
+    WeightTableEvaluator(uint32_t height, uint32_t width,
+                         const int64_t *weights);
+
+ private:
+    const int64_t *const weights_;
+    const uint32_t height_;
+    const uint32_t width_;
 
     /**
      * Retrive the weight.
@@ -55,10 +60,6 @@ class WeightTableEvaluator : EvaluationFunction {
     int64_t weight(uint32_t r, uint32_t c) noexcept {
         return weights_[r * width_ + c];
     }
-
- private:
-    const uint32_t height_;
-    const uint32_t width_;
 };
 
 }  // namespace ai

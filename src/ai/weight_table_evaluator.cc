@@ -21,7 +21,7 @@ int64_t WeightTableEvaluator::operator()(const GameState &state) {
 
 // constructor
 WeightTableEvaluator::WeightTableEvaluator(uint32_t height, uint32_t width,
-                                           int64_t *weights)
+                                           const int64_t *weights)
         : weights_(weights), height_(height), width_(width) {
     if (height_ == 0 || width_ == 0)
         throw std::invalid_argument("The weight table size is 0");
