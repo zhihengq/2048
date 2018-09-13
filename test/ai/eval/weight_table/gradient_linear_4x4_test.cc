@@ -1,4 +1,4 @@
-#include "ai/gradient_linear_4x4_weight_evaluator.h"
+#include "ai/eval/weight_table/gradient_linear_4x4.h"
 
 #include <gtest/gtest.h>
 
@@ -12,7 +12,7 @@ class GradientLinear4x4WeightEvaluatorTest : public testing::Test {
  protected:
     std::unique_ptr<GameState> state_empty_;
     std::unique_ptr<GameState> state_normal_;
-    _2048::ai::GradientLinear4x4WeightEvaluator eval_;
+    _2048::ai::eval::weight_table::GradientLinear4x4 eval_;
 
     void SetUp() override {
         state_empty_.reset(new GameState(4, 4));

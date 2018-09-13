@@ -1,5 +1,5 @@
-#ifndef _AI_RANDOM_GENERATOR_H_
-#define _AI_RANDOM_GENERATOR_H_
+#ifndef _AI_RANDOMGENERATOR_H_
+#define _AI_RANDOMGENERATOR_H_
 
 #include <cstdint>
 #include <random>
@@ -10,6 +10,10 @@
 namespace _2048 {
 namespace ai {
 
+/**
+ * A `Generator` that generates random tiles.
+ * The probability distribution is the same as the original 2048 game.
+ */
 class RandomGenerator : public Generator {
  public:
     RandomGenerator(const RandomGenerator &) = delete;
@@ -36,4 +40,4 @@ class RandomGenerator : public Generator {
 }  // namespace ai
 }  // namespace _2048
 
-#endif  // _AI_RANDOM_GENERATOR_H_
+#endif  // _AI_RANDOMGENERATOR_H_

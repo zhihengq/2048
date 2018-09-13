@@ -1,4 +1,4 @@
-#include "ai/evaluation_function.h"
+#include "ai/eval/eval_func.h"
 
 #include <cstdint>
 #include <gtest/gtest.h>
@@ -6,8 +6,8 @@
 namespace {
 
 TEST(EvaluationFunctionTest, MaxMinConstants) {
-    int64_t max = _2048::ai::EvaluationFunction::kMaxValue;
-    int64_t min = _2048::ai::EvaluationFunction::kMinValue;
+    int64_t max = _2048::ai::eval::EvaluationFunction::kPosInf;
+    int64_t min = _2048::ai::eval::EvaluationFunction::kNegInf;
     EXPECT_EQ(max, 0x7FFFFFFFFFFFFFFF);
     EXPECT_EQ(min, -0x7FFFFFFFFFFFFFFF);
     EXPECT_EQ(max + min, 0);

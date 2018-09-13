@@ -1,5 +1,5 @@
-#ifndef _UI_NCURSES_VIEWER_H_
-#define _UI_NCURSES_VIEWER_H_
+#ifndef _UI_NCURSESVIEWER_H_
+#define _UI_NCURSESVIEWER_H_
 
 #include <memory>
 
@@ -50,4 +50,4 @@ class NcursesViewer : public Viewer {
 }  // namespace ui
 }  // namespace _2048
 
-#endif  // _UI_NCURSES_VIEWER_H_
+#endif  // _UI_NCURSESVIEWER_H_

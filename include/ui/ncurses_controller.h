@@ -1,5 +1,5 @@
-#ifndef _UI_NCURSES_CONTROLLER_H_
-#define _UI_NCURSES_CONTROLLER_H_
+#ifndef _UI_NCURSESCONTROLLER_H_
+#define _UI_NCURSESCONTROLLER_H_
 
 #include <memory>
 #include <ncurses.h>
@@ -22,7 +22,7 @@ class NcursesController : public NcursesViewer, public Player {
      * Ask the user for a move.
      * The function will fail and return false if the user pressed a key other
      * than the arrow keys.
-     * @copydoc
+     * @copydetails Player::Play
      */
     bool Play(const GameState &state, GameState::Direction *move) override;
 
@@ -56,7 +56,7 @@ class NcursesController : public NcursesViewer, public Player {
     static void NcursesControllerResizeHandler(int sig) noexcept;
 };
 
-}  // namespace ai
+}  // namespace ui
 }  // namespace _2048
 
-#endif  // _UI_NCURSES_CONTROLLER_H_
+#endif  // _UI_NCURSESCONTROLLER_H_

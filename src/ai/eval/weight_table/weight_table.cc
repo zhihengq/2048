@@ -1,13 +1,15 @@
-#include "ai/weight_table_evaluator.h"
+#include "ai/eval/weight_table/weight_table.h"
 
 #include <cstdint>
 #include <stdexcept>
 
 namespace _2048 {
 namespace ai {
+namespace eval {
+namespace weight_table {
 
 // operator()
-int64_t WeightTableEvaluator::operator()(const GameState &state) {
+int64_t WeightTable::operator()(const GameState &state) {
     if (state.height() != height_ || state.width() != width_)
         throw std::invalid_argument(
                 "GameState and wight table have mismatch size");
@@ -22,8 +24,8 @@ int64_t WeightTableEvaluator::operator()(const GameState &state) {
 }
 
 // constructor
-WeightTableEvaluator::WeightTableEvaluator(uint32_t height, uint32_t width,
-                                           const int64_t *weights)
+WeightTable::WeightTable(uint32_t height, uint32_t width,
+                         const int64_t *weights)
         : weights_(weights), height_(height), width_(width) {
     if (height_ == 0 || width_ == 0)
         throw std::invalid_argument("The weight table size is 0");
@@ -31,5 +33,7 @@ WeightTableEvaluator::WeightTableEvaluator(uint32_t height, uint32_t width,
         throw std::invalid_argument("The weight table is null");
 }
 
+}  // namespace weight_table
+}  // namespace eval
 }  // namespace ai
 }  // namespace _2048

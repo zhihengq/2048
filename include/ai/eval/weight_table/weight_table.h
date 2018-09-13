@@ -1,32 +1,34 @@
-#ifndef _AI_WEIGHT_TABLE_EVALUATOR_H_
-#define _AI_WEIGHT_TABLE_EVALUATOR_H_
+#ifndef _AI_EVAL_WEIGHTTABLE_WEIGHTTABLE_H_
+#define _AI_EVAL_WEIGHTTABLE_WEIGHTTABLE_H_
 
 #include <cstdint>
 
-#include "ai/evaluation_function.h"
+#include "ai/eval/eval_func.h"
 
 namespace _2048 {
 namespace ai {
+namespace eval {
+namespace weight_table {
 
 /**
- * A evaluation function based on a weight table.
+ * Base class of evaluation functions based on a weight table.
  *
  * The value is calculated by adding tile values times their position weights.
  */
-class WeightTableEvaluator : public EvaluationFunction {
+class WeightTable : public EvaluationFunction {
  public:
-    WeightTableEvaluator() = delete;
-    WeightTableEvaluator &operator=(const WeightTableEvaluator &) = delete;
+    WeightTable() = delete;
+    WeightTable &operator=(const WeightTable &) = delete;
 
     /**
      * Copy Constructor
-     * @param t the `WeightTableEvaluator` to be copied
+     * @param t the `WeightTable` to be copied
      */
-    WeightTableEvaluator(const WeightTableEvaluator &t) noexcept
+    WeightTable(const WeightTable &t) noexcept
             : weights_(t.weights_), height_(t.height_), width_(t.width_) { }
 
     /**
-     * @copydoc
+     * @copydoc EvaluationFunction::operator()()
      * @throw std::invalid_argument if `state` and the weight table have
      *      different size
      */
@@ -42,8 +44,8 @@ class WeightTableEvaluator : public EvaluationFunction {
      * @throw std::invalid_argument if the size of the weight table is 0
      * @throw std::invalid_argument if `weights` is `nullptr`
      */
-    WeightTableEvaluator(uint32_t height, uint32_t width,
-                         const int64_t *weights);
+    WeightTable(uint32_t height, uint32_t width,
+                const int64_t *weights);
 
  private:
     const int64_t *const weights_;
@@ -62,7 +64,9 @@ class WeightTableEvaluator : public EvaluationFunction {
     }
 };
 
+}  // namespace weight_table
+}  // namespace eval
 }  // namespace ai
 }  // namespace _2048
 
-#endif  // _AI_WEIGHT_TABLE_EVALUATOR_H_
+#endif  // _AI_EVAL_WEIGHTTABLE_WEIGHTTABLE_H_

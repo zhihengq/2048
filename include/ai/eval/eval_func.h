@@ -1,5 +1,5 @@
-#ifndef _AI_EVALUATION_FUNCTION_H_
-#define _AI_EVALUATION_FUNCTION_H_
+#ifndef _AI_EVAL_EVALFUNC_H_
+#define _AI_EVAL_EVALFUNC_H_
 
 #include <cstdint>
 #include <limits>
@@ -8,6 +8,7 @@
 
 namespace _2048 {
 namespace ai {
+namespace eval {
 
 /**
  * Interface of a game state evaluation function for minimax.
@@ -18,10 +19,10 @@ namespace ai {
  */
 class EvaluationFunction {
  public:
-    /** The maximum value representable */
-    static const int64_t kMaxValue =  std::numeric_limits<int64_t>::max();
-    /** The minimum value representable (negative maximum) */
-    static const int64_t kMinValue = -std::numeric_limits<int64_t>::max();
+    /** Positive infinity */
+    static const int64_t kPosInf =  std::numeric_limits<int64_t>::max();
+    /** Negative infinity */
+    static const int64_t kNegInf = -std::numeric_limits<int64_t>::max();
 
     /**
      * Evaluate the game state.
@@ -37,7 +38,8 @@ class EvaluationFunction {
     virtual ~EvaluationFunction() noexcept { }
 };
 
+}  // namespace eval
 }  // namespace ai
 }  // namespace _2048
 
-#endif  // _AI_EVALUATION_FUNCTION_H_
+#endif  // _AI_EVAL_EVALFUNC_H_

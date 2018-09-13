@@ -11,7 +11,7 @@ override LDFLAGS += -L$(BINDIR) -fPIC
 
 ### Phony Targets
 
-all: $(patsubst %,$(BINDIR)/%, 2048_ncurses 2048_ncurses_random)
+all: $(patsubst %,$(BINDIR)/%, ncurses/2048 ncurses/2048_random)
 
 test: $(patsubst %,$(BINDIR)/$(TESTDIR)/%, auto_tests ncurses_test)
 	LD_LIBRARY_PATH=$(BINDIR) $<
@@ -29,8 +29,9 @@ clean:
 
 # call BUILD_RULE,<group>,<src>,<headers>
 define BUILD_RULE =
-override $(strip $1) += $(BUILDDIR)/$(strip $2).o
-$(BUILDDIR)/$(strip $2).o : $(SRCDIR)/$(strip $2).cc $(strip $(3:%=$(INCDIR)/%.h))
+$(strip $1) += $(BUILDDIR)/$(strip $2).o
+_DEPS = $(SRCDIR)/$(strip $2).cc $(strip $(3:%=$(INCDIR)/%.h))
+$(BUILDDIR)/$(strip $2).o : $$(_DEPS)
 	@mkdir -p $$(@D)
 	$(CXX) $(CXXFLAGS) -c $$< -o $$@
 endef
@@ -38,7 +39,11 @@ endef
 
 ### Header Dependencies
 
-H_ALL = tile grid game_state viewer generator player game ui/ncurses_viewer ui/ncurses_controller ai/random_generator ai/evaluation_function ai/weight_table_evaluator
+H_ALL  = tile grid game_state viewer generator player game
+H_ALL += ui/ncurses_viewer ui/ncurses_controller
+H_ALL += ai/random_generator ai/random_player
+H_ALL += ai/eval/eval_func ai/eval/weight_table/weight_table
+H_ALL += ai/eval/weight_table/gradient_linear_4x4
 
 H_TILE = tile
 H_GRID = grid $(H_TILE)
@@ -47,13 +52,16 @@ H_VIEWER = viewer $(H_GAME_STATE)
 H_GENERATOR = generator $(H_GAME_STATE)
 H_PLAYER = player $(H_GAME_STATE)
 H_GAME = game $(H_GAME_STATE) $(H_VIEWER) $(H_GENERATOR) $(H_PLAYER)
-H_UI_NCURSES_VIEWER = ui/ncurses_viewer $(H_GAME_STATE) $(H_VIEWER)
-H_UI_NCURSES_CONTROLLER = ui/ncurses_controller $(H_GAME_STATE) $(H_PLAYER) $(H_UI_NCURSES_VIEWER)
-H_AI_RANDOM_GENERATOR = ai/random_generator $(H_GENERATOR)
-H_AI_RANDOM_PLAYER = ai/random_player $(H_PLAYER)
-H_AI_EVALUATION_FUNCTION = ai/evaluation_function $(H_GAME_STATE)
-H_AI_WEIGHT_TABLE_EVALUATOR = ai/weight_table_evaluator $(H_AI_EVALUATION_FUNCTION)
-H_AI_GRADIENT_LINEAR_4X4_WEIGHT_EVALUATOR = ai/gradient_linear_4x4_weight_evaluator $(H_AI_WEIGHT_TABLE_EVALUATOR)
+H_UI_NCURSESVIEWER = ui/ncurses_viewer $(H_GAME_STATE) $(H_VIEWER)
+H_UI_NCURSESCONTROLLER  = ui/ncurses_controller
+H_UI_NCURSESCONTROLLER += $(H_GAME_STATE) $(H_PLAYER) $(H_UI_NCURSESVIEWER)
+H_AI_RANDOMGENERATOR = ai/random_generator $(H_GENERATOR)
+H_AI_RANDOMPLAYER = ai/random_player $(H_PLAYER)
+H_AI_EVAL_EVALFUNC = ai/eval/eval_func $(H_GAME_STATE)
+H_AI_EVAL_WEIGHTTABLE_WEIGHTTABLE  = ai/eval/weight_table/weight_table
+H_AI_EVAL_WEIGHTTABLE_WEIGHTTABLE += $(H_AI_EVAL_EVALFUNC)
+H_AI_EVAL_WEIGHTTABLE_GRADIENTLINEAR4X4  = ai/eval/weight_table/gradient_linear_4x4
+H_AI_EVAL_WEIGHTTABLE_GRADIENTLINEAR4X4 += $(H_AI_EVAL_WEIGHTTABLE_WEIGHTTABLE)
 
 
 ### Objects
@@ -63,40 +71,66 @@ $(eval $(call BUILD_RULE, GAMELOGIC_OBJS, grid, $(H_GRID)))
 $(eval $(call BUILD_RULE, GAMELOGIC_OBJS, game_state, $(H_GAME_STATE)))
 $(eval $(call BUILD_RULE, GAMELOGIC_OBJS, game, $(H_GAME)))
 
-$(eval $(call BUILD_RULE, BOTS_OBJS, ai/random_generator, $(H_AI_RANDOM_GENERATOR)))
-$(eval $(call BUILD_RULE, BOTS_OBJS, ai/random_player, $(H_AI_RANDOM_PLAYER)))
-$(eval $(call BUILD_RULE, BOTS_OBJS, ai/weight_table_evaluator, $(H_AI_WEIGHT_TABLE_EVALUATOR)))
-$(eval $(call BUILD_RULE, BOTS_OBJS, ai/gradient_linear_4x4_weight_evaluator, $(H_AI_GRADIENT_LINEAR_4X4_WEIGHT_EVALUATOR)))
+_H = $(H_AI_RANDOMGENERATOR)
+$(eval $(call BUILD_RULE, RANDOM_OBJS, ai/random_generator, $(_H)))
+_H = $(H_AI_RANDOMPLAYER)
+$(eval $(call BUILD_RULE, RANDOM_OBJS, ai/random_player, $(_H)))
 
-$(eval $(call BUILD_RULE, NCURSES_OBJS, ui/ncurses_viewer, $(H_UI_NCURSES_VIEWER)))
-$(eval $(call BUILD_RULE, NCURSES_OBJS, ui/ncurses_controller, $(H_UI_NCURSES_CONTROLLER)))
+_S = ai/eval/weight_table/weight_table
+_H = $(H_AI_WEIGHT_TABLE_EVALUATOR)
+$(eval $(call BUILD_RULE, BOTS_OBJS, $(_S), $(_H)))
+_S = ai/eval/weight_table/gradient_linear_4x4
+_H = $(H_AI_EVAL_WEIGHTTABLE_GRADIENTLINEAR4X4)
+$(eval $(call BUILD_RULE, BOTS_OBJS, $(_S), $(_H)))
 
-$(eval $(call BUILD_RULE, OTHER_OBJS, app/2048_ncurses, $(H_GAME) $(H_NCURSES_CONTROLLER) $(H_AI_RANDOM_GENERATOR)))
-$(eval $(call BUILD_RULE, OTHER_OBJS, app/2048_ncurses_random, $(H_GAME) $(H_NCURSES_VIEWER) $(H_AI_RANDOM_GENERATOR) $(H_AI_RANDOM_PLAYER)))
+_H = $(H_UI_NCURSESVIEWER)
+$(eval $(call BUILD_RULE, NCURSES_OBJS, ui/ncurses_viewer, $(_H)))
+_H = $(H_UI_NCURSESCONTROLLER)
+$(eval $(call BUILD_RULE, NCURSES_OBJS, ui/ncurses_controller, $(_H)))
+
+_H = $(H_GAME) $(H_NCURSES_CONTROLLER) $(H_AI_RANDOMGENERATOR)
+$(eval $(call BUILD_RULE, APP_OBJS, app/ncurses/2048, $(_H)))
+_H  = $(H_GAME) $(H_NCURSES_VIEWER)
+_H += $(H_AI_RANDOMGENERATOR) $(H_AI_RANDOMPLAYER)
+$(eval $(call BUILD_RULE, APP_OBJS, app/ncurses/2048_random, $(_H)))
 
 
 ### Executables
 
 $(BINDIR)/libgamelogic.so : $(GAMELOGIC_OBJS)
+	@mkdir -p $(@D)
 	$(CXX) $(LDFLAGS) -shared $^ -o $@
 
 $(BINDIR)/libbots.so : $(BOTS_OBJS)
+	@mkdir -p $(@D)
 	$(CXX) $(LDFLAGS) -shared $^ -o $@
 
-$(BINDIR)/2048_ncurses : $(patsubst %,$(BUILDDIR)/%.o,app/2048_ncurses ai/random_generator) $(NCURSES_OBJS) | $(BINDIR)/libgamelogic.so
+_DEPS  = $(patsubst %,$(BUILDDIR)/%.o,app/ncurses/2048 ai/random_generator)
+_DEPS += $(NCURSES_OBJS) | $(BINDIR)/libgamelogic.so
+$(BINDIR)/ncurses/2048 : $(_DEPS)
+	@mkdir -p $(@D)
 	$(CXX) $(LDFLAGS) -lgamelogic -lncurses $^ -o $@
 
-$(BINDIR)/2048_ncurses_random : $(patsubst %,$(BUILDDIR)/%.o,app/2048_ncurses_random ui/ncurses_viewer) | $(BINDIR)/libgamelogic.so $(BINDIR)/libbots.so
-	$(CXX) $(LDFLAGS) -lgamelogic -lbots -lncurses $^ -o $@
+_DEPS  = $(patsubst %,$(BUILDDIR)/%.o,app/ncurses/2048_random ui/ncurses_viewer)
+_DEPS += $(RANDOM_OBJS) | $(BINDIR)/libgamelogic.so
+$(BINDIR)/ncurses/2048_random : $(_DEPS)
+	@mkdir -p $(@D)
+	$(CXX) $(LDFLAGS) -lgamelogic -lncurses $^ -o $@
 
 
 ### Tests
 
-$(BINDIR)/$(TESTDIR)/auto_tests : $(patsubst %,$(BUILDDIR)/$(TESTDIR)/%_test.o,tile grid game_state game evaluation_function gradient_linear_4x4_weight_evaluator) | $(BINDIR)/libgamelogic.so $(BINDIR)/libbots.so
+AUTO_TESTS  = tile grid game_state game
+AUTO_TESTS += ai/eval/eval_func ai/eval/weight_table/gradient_linear_4x4
+_DEPS  = $(patsubst %,$(BUILDDIR)/$(TESTDIR)/%_test.o, $(AUTO_TESTS))
+_DEPS += | $(BINDIR)/libgamelogic.so $(BINDIR)/libbots.so
+$(BINDIR)/$(TESTDIR)/auto_tests : $(_DEPS)
 	@mkdir -p $(@D)
 	$(CXX) $(LDFLAGS) -lgamelogic -lbots $(LDFLAGS_GTEST) $^ -o $@
 
-$(BINDIR)/$(TESTDIR)/ncurses_test : $(BUILDDIR)/$(TESTDIR)/ncurses_test.o $(NCURSES_OBJS) | $(BINDIR)/libgamelogic.so
+_DEPS  = $(BUILDDIR)/$(TESTDIR)/ui/ncurses_test.o $(NCURSES_OBJS)
+_DEPS += | $(BINDIR)/libgamelogic.so
+$(BINDIR)/$(TESTDIR)/ncurses_test : $(_DEPS)
 	@mkdir -p $(@D)
 	$(CXX) $(LDFLAGS) -lgamelogic -lncurses $^ -o $@
 
