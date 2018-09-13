@@ -13,9 +13,11 @@ int64_t WeightTableEvaluator::operator()(const GameState &state) {
                 "GameState and wight table have mismatch size");
     int64_t sum = 0;
     for (uint32_t r = 0; r < height_; r++)
-        for (uint32_t c = 0; c < width_; c++)
-            sum += (1 << state.tile(GameState::Position(r, c)).power()) *
-                    weight(r, c);
+        for (uint32_t c = 0; c < width_; c++) {
+            const Tile &tile = state.tile(GameState::Position(r, c));
+            if (!tile.empty())
+                sum += (1 << tile.power()) * weight(r, c);
+        }
     return sum;
 }
 
