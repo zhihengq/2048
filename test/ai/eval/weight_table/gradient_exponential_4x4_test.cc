@@ -1,4 +1,4 @@
-#include "ai/eval/weight_table/gradient_linear_4x4.h"
+#include "ai/eval/weight_table/gradient_exponential_4x4.h"
 
 #include <gtest/gtest.h>
 
@@ -8,11 +8,11 @@ namespace {
 
 using _2048::GameState;
 
-class GradientLinear4x4Test : public testing::Test {
+class GradientExponential4x4Test : public testing::Test {
  protected:
     std::unique_ptr<GameState> state_empty_;
     std::unique_ptr<GameState> state_normal_;
-    _2048::ai::eval::weight_table::GradientLinear4x4 eval_;
+    _2048::ai::eval::weight_table::GradientExponential4x4 eval_;
 
     void SetUp() override {
         state_empty_.reset(new GameState(4, 4));
@@ -33,13 +33,13 @@ class GradientLinear4x4Test : public testing::Test {
     }
 };
 
-TEST_F(GradientLinear4x4Test, Empty) {
+TEST_F(GradientExponential4x4Test, Empty) {
     EXPECT_EQ(eval_(*state_empty_), 0);
 }
 
-TEST_F(GradientLinear4x4Test, Normal) {
-    // 2048*1 + 64*2 + 8*2 + 32*3 + 4*3 + 4*4 + 2*4 + 2*5 + 4*7
-    EXPECT_EQ(eval_(*state_normal_), -2362);
+TEST_F(GradientExponential4x4Test, Normal) {
+    // 2048*1 + 64*2 + 8*2 + 32*4 + 4*4 + 4*8 + 2*8 + 2*16 + 4*64
+    EXPECT_EQ(eval_(*state_normal_), -2672);
 }
 
 }  // namespace

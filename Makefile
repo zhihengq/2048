@@ -44,6 +44,7 @@ H_ALL += ui/ncurses_viewer ui/ncurses_controller
 H_ALL += ai/random_generator ai/random_player
 H_ALL += ai/eval/eval_func ai/eval/weight_table/weight_table
 H_ALL += ai/eval/weight_table/gradient_linear_4x4
+H_ALL += ai/eval/weight_table/gradient_exponential_4x4
 
 H_TILE = tile
 H_GRID = grid $(H_TILE)
@@ -62,6 +63,8 @@ H_AI_EVAL_WEIGHTTABLE_WEIGHTTABLE  = ai/eval/weight_table/weight_table
 H_AI_EVAL_WEIGHTTABLE_WEIGHTTABLE += $(H_AI_EVAL_EVALFUNC)
 H_AI_EVAL_WEIGHTTABLE_GRADIENTLINEAR4X4  = ai/eval/weight_table/gradient_linear_4x4
 H_AI_EVAL_WEIGHTTABLE_GRADIENTLINEAR4X4 += $(H_AI_EVAL_WEIGHTTABLE_WEIGHTTABLE)
+H_AI_EVAL_WEIGHTTABLE_GRADIENTEXPONENTIAL4X4  = ai/eval/weight_table/gradient_exponential_4x4
+H_AI_EVAL_WEIGHTTABLE_GRADIENTEXPONENTIAL4X4 += $(H_AI_EVAL_WEIGHTTABLE_WEIGHTTABLE)
 
 
 ### Objects
@@ -81,6 +84,9 @@ _H = $(H_AI_WEIGHT_TABLE_EVALUATOR)
 $(eval $(call BUILD_RULE, BOTS_OBJS, $(_S), $(_H)))
 _S = ai/eval/weight_table/gradient_linear_4x4
 _H = $(H_AI_EVAL_WEIGHTTABLE_GRADIENTLINEAR4X4)
+$(eval $(call BUILD_RULE, BOTS_OBJS, $(_S), $(_H)))
+_S = ai/eval/weight_table/gradient_exponential_4x4
+_H = $(H_AI_EVAL_WEIGHTTABLE_GRADIENTEXPONENTIAL4X4)
 $(eval $(call BUILD_RULE, BOTS_OBJS, $(_S), $(_H)))
 
 _H = $(H_UI_NCURSESVIEWER)
@@ -121,7 +127,9 @@ $(BINDIR)/ncurses/2048_random : $(_DEPS)
 ### Tests
 
 AUTO_TESTS  = tile grid game_state game
-AUTO_TESTS += ai/eval/eval_func ai/eval/weight_table/gradient_linear_4x4
+AUTO_TESTS += ai/eval/eval_func
+AUTO_TESTS += ai/eval/weight_table/gradient_linear_4x4
+AUTO_TESTS += ai/eval/weight_table/gradient_exponential_4x4
 _DEPS  = $(patsubst %,$(BUILDDIR)/$(TESTDIR)/%_test.o, $(AUTO_TESTS))
 _DEPS += | $(BINDIR)/libgamelogic.so $(BINDIR)/libbots.so
 $(BINDIR)/$(TESTDIR)/auto_tests : $(_DEPS)
