@@ -53,6 +53,7 @@ H_AI_RANDOM_GENERATOR = ai/random_generator $(H_GENERATOR)
 H_AI_RANDOM_PLAYER = ai/random_player $(H_PLAYER)
 H_AI_EVALUATION_FUNCTION = ai/evaluation_function $(H_GAME_STATE)
 H_AI_WEIGHT_TABLE_EVALUATOR = ai/weight_table_evaluator $(H_AI_EVALUATION_FUNCTION)
+H_AI_GRADIENT_LINEAR_4X4_WEIGHT_EVALUATOR = ai/gradient_linear_4x4_weight_evaluator $(H_AI_WEIGHT_TABLE_EVALUATOR)
 
 
 ### Objects
@@ -65,6 +66,7 @@ $(eval $(call BUILD_RULE, GAMELOGIC_OBJS, game, $(H_GAME)))
 $(eval $(call BUILD_RULE, BOTS_OBJS, ai/random_generator, $(H_AI_RANDOM_GENERATOR)))
 $(eval $(call BUILD_RULE, BOTS_OBJS, ai/random_player, $(H_AI_RANDOM_PLAYER)))
 $(eval $(call BUILD_RULE, BOTS_OBJS, ai/weight_table_evaluator, $(H_AI_WEIGHT_TABLE_EVALUATOR)))
+$(eval $(call BUILD_RULE, BOTS_OBJS, ai/gradient_linear_4x4_weight_evaluator, $(H_AI_GRADIENT_LINEAR_4X4_WEIGHT_EVALUATOR)))
 
 $(eval $(call BUILD_RULE, NCURSES_OBJS, ui/ncurses_viewer, $(H_UI_NCURSES_VIEWER)))
 $(eval $(call BUILD_RULE, NCURSES_OBJS, ui/ncurses_controller, $(H_UI_NCURSES_CONTROLLER)))
