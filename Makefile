@@ -92,7 +92,7 @@ $(BINDIR)/2048_ncurses_random : $(patsubst %,$(BUILDDIR)/%.o,app/2048_ncurses_ra
 
 ### Tests
 
-$(BINDIR)/$(TESTDIR)/auto_tests : $(patsubst %,$(BUILDDIR)/$(TESTDIR)/%_test.o,tile grid game_state game evaluation_function) | $(BINDIR)/libgamelogic.so $(BINDIR)/libbots.so
+$(BINDIR)/$(TESTDIR)/auto_tests : $(patsubst %,$(BUILDDIR)/$(TESTDIR)/%_test.o,tile grid game_state game evaluation_function gradient_linear_4x4_weight_evaluator) | $(BINDIR)/libgamelogic.so $(BINDIR)/libbots.so
 	@mkdir -p $(@D)
 	$(CXX) $(LDFLAGS) -lgamelogic -lbots $(LDFLAGS_GTEST) $^ -o $@
 
