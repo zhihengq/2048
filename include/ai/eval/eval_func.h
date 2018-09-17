@@ -20,9 +20,11 @@ namespace eval {
 class EvaluationFunction {
  public:
     /** Positive infinity */
-    static const int64_t kPosInf =  std::numeric_limits<int64_t>::max();
+    static constexpr int64_t kPosInf =  std::numeric_limits<int64_t>::max();
     /** Negative infinity */
-    static const int64_t kNegInf = -std::numeric_limits<int64_t>::max();
+    static constexpr int64_t kNegInf = std::numeric_limits<int64_t>::min();
+    /** Game over */
+    static constexpr int64_t kOver = -1000000000000000000;
 
     /**
      * Evaluate the game state.
