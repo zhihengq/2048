@@ -22,6 +22,7 @@ inline void init(_2048::Game &game) {
 // return true if the user choose to quit
 // return false otherwise
 bool ProcessMenu(int key, _2048::Game &game, bool &pause) {
+    using _2048::ui::NcursesViewer;
     switch (key) {
         case 'q':
             return true;
@@ -30,6 +31,7 @@ bool ProcessMenu(int key, _2048::Game &game, bool &pause) {
             return false;
         case 'p':
             pause = !pause;
+            NcursesViewer::instance().SetStatusLine(pause ? U"Pause" : U"");
             nodelay(stdscr, pause ? FALSE : TRUE);
             return false;
         default:
@@ -66,6 +68,7 @@ int main(int argc, char **argv) {
     // take turns
     bool player_turn = true;
     bool pause = true;
+    view.SetStatusLine(U"Pause");
     while (true) {
         int key = getch();
         if (ProcessMenu(key, game, pause))

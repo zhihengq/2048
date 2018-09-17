@@ -46,12 +46,19 @@ int main() {
     bool player_turn = true;
     while (true) {
         if (player_turn) {
-            if (game.Play())
-                player_turn = false;
-            else if (ProcessMenu(control.GetLastKey(), game))
+            int key;
+            if (game.NoMoreMove()) {
+                control.SetStatusLine(U"No more move, game over!");
+                key = getch();
+            } else {
+                if (game.Play())
+                    player_turn = false;
+                key = control.GetLastKey();
+            }
+            if (ProcessMenu(key, game))
                 return 0;
         } else {
-            std::this_thread::sleep_for(std::chrono::milliseconds(200));
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
             flushinp();     // throw away unread keys during wait
             game.Generate();
             player_turn = true;
