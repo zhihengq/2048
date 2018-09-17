@@ -34,7 +34,6 @@ NcursesViewer::NcursesViewer(void (*resize_handler)(int)) noexcept
     noecho();
     cbreak();
     keypad(stdscr, TRUE);
-    attron(A_BOLD);
     saved_handler_ = std::signal(SIGWINCH, resize_handler);
 }
 
@@ -47,6 +46,31 @@ NcursesViewer::~NcursesViewer() noexcept {
 // update
 void NcursesViewer::Update(const GameState &state) {
     saved_state_.reset(new GameState(state));
+    Redraw();
+}
+
+// get dimension
+void NcursesViewer::dimension(uint32_t &height,
+                              uint32_t &width) const noexcept {
+    unsigned int scr_height, scr_width;
+    getmaxyx(stdscr, scr_height, scr_width);
+    height = scr_height;
+    width = scr_width;
+}
+
+
+// get status line
+const std::string &NcursesViewer::GetStatusLine() const noexcept {
+    return status_;
+}
+
+// set status line
+void NcursesViewer::SetStatusLine(const std::string &status) noexcept {
+    status_ = status;
+    Redraw();
+}
+void NcursesViewer::SetStatusLine(std::string &&status) noexcept {
+    status_ = std::move(status);
     Redraw();
 }
 
@@ -105,6 +129,7 @@ void NcursesViewer::Redraw() noexcept {
 
     // actuate
     clear();
+    attron(A_BOLD);
     for (uint32_t r = 0; r < saved_state_->height(); r++) {
         // draw upper boarder
         if (r == 0) {
@@ -151,6 +176,12 @@ void NcursesViewer::Redraw() noexcept {
             }
         }
     }
+    attroff(A_BOLD);
+
+    // draw status line
+    move(scr_height - 1, 0);
+    addstr(status_.c_str());
+
     refresh();
 }
 

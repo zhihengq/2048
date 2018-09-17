@@ -27,7 +27,7 @@ enum class ViewerType {
     kNcursesViewer, kNcursesController
 };
 
-static void User(Game &game, const Viewer &view, ViewerType type) {
+static void User(Game &game, const NcursesViewer &view, ViewerType type) {
     switch (type) {
         case ViewerType::kNcursesViewer:
             while (getch() != 'n') { }
@@ -52,7 +52,7 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    Viewer *view;
+    NcursesViewer *view;
     Player *player;
     ViewerType type;
     if (std::string("NcursesViewer") == argv[1]) {
@@ -80,6 +80,7 @@ int main(int argc, char **argv) {
     s1.GenerateTile(GameState::Position(1, 0), 3);
     s1.GenerateTile(GameState::Position(1, 1), 4);
     game.Reset(std::move(s1));
+    view->SetStatusLine("Game 1");
     User(game, *view, type);
 
     // 4x4
@@ -98,6 +99,7 @@ int main(int argc, char **argv) {
     s2.GenerateTile(GameState::Position(3, 1), 6);
     s2.GenerateTile(GameState::Position(3, 2), 5);
     game.Reset(std::move(s2));
+    view->SetStatusLine("Game 2");
     User(game, *view, type);
 
     return 0;
