@@ -71,6 +71,9 @@ H_AI_EVAL_WEIGHTTABLE_ZIGZAGLINEAR4X4  = ai/eval/weight_table/zigzag_linear_4x4
 H_AI_EVAL_WEIGHTTABLE_ZIGZAGLINEAR4X4 += $(H_AI_EVAL_WEIGHTTABLE_WEIGHTTABLE)
 H_AI_EVAL_WEIGHTTABLE_ZIGZAGEXPONENTIAL4X4  = ai/eval/weight_table/zigzag_exponential_4x4
 H_AI_EVAL_WEIGHTTABLE_ZIGZAGEXPONENTIAL4X4 += $(H_AI_EVAL_WEIGHTTABLE_WEIGHTTABLE)
+H_AI_SEARCHER_SEARCHER  = ai/searcher/searcher $(H_AI_EVAL_EVALFUNC)
+H_AI_SEARCHER_SEARCHER += $(H_GENERATOR) $(H_PLAYER)
+H_AI_SEARCHER_MINIMAX = ai/searcher/minimax $(H_AI_SEARCHER_SEARCHER)
 
 
 ### Objects
@@ -84,6 +87,11 @@ _H = $(H_AI_RANDOMGENERATOR)
 $(eval $(call BUILD_RULE, RANDOM_OBJS, ai/random_generator, $(_H)))
 _H = $(H_AI_RANDOMPLAYER)
 $(eval $(call BUILD_RULE, RANDOM_OBJS, ai/random_player, $(_H)))
+
+_H = $(H_UI_NCURSESVIEWER)
+$(eval $(call BUILD_RULE, NCURSES_OBJS, ui/ncurses_viewer, $(_H)))
+_H = $(H_UI_NCURSESCONTROLLER)
+$(eval $(call BUILD_RULE, NCURSES_OBJS, ui/ncurses_controller, $(_H)))
 
 $(eval $(call BUILD_RULE, BOTS_OBJS, ai/eval/num_tile, $(H_AI_EVAL_NUMTILE)))
 $(eval $(call BUILD_RULE, BOTS_OBJS, ai/eval/sum_exponents, $(H_AI_EVAL_SUMEXPONENTS)))
@@ -102,11 +110,9 @@ $(eval $(call BUILD_RULE, BOTS_OBJS, $(_S), $(_H)))
 _S = ai/eval/weight_table/zigzag_exponential_4x4
 _H = $(H_AI_EVAL_WEIGHTTABLE_ZIGZAGEXPONENTIAL4X4)
 $(eval $(call BUILD_RULE, BOTS_OBJS, $(_S), $(_H)))
+_H = $(H_AI_SEARCHER_MINIMAX) $(H_AI_EVAL_EVALFUNC)
+$(eval $(call BUILD_RULE, BOTS_OBJS, ai/searcher/minimax, $(_H)))
 
-_H = $(H_UI_NCURSESVIEWER)
-$(eval $(call BUILD_RULE, NCURSES_OBJS, ui/ncurses_viewer, $(_H)))
-_H = $(H_UI_NCURSESCONTROLLER)
-$(eval $(call BUILD_RULE, NCURSES_OBJS, ui/ncurses_controller, $(_H)))
 
 _H = $(H_GAME) $(H_NCURSES_CONTROLLER) $(H_AI_RANDOMGENERATOR)
 $(eval $(call BUILD_RULE, APP_OBJS, app/ncurses/2048, $(_H)))
