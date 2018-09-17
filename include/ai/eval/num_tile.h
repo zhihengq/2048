@@ -14,7 +14,7 @@ namespace eval {
  */
 class NumTile : public EvaluationFunction {
  public:
-    int64_t operator()(const GameState &state) override;
+    int64_t operator()(const GameState &state) const override;
 };
 
 }  // namespace eval

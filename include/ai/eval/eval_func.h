@@ -32,7 +32,7 @@ class EvaluationFunction {
      * @return the value of the state (to the player)
      * @throw std::runtime_error if `state` is not valid
      */
-    virtual int64_t operator()(const GameState &state) = 0;
+    virtual int64_t operator()(const GameState &state) const = 0;
 
     /**
      * Destructor

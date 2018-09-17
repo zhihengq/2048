@@ -9,7 +9,7 @@ namespace eval {
 namespace weight_table {
 
 // operator()
-int64_t WeightTable::operator()(const GameState &state) {
+int64_t WeightTable::operator()(const GameState &state) const {
     if (state.height() != height_ || state.width() != width_)
         throw std::invalid_argument(
                 "GameState and wight table have mismatch size");

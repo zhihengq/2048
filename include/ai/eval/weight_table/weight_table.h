@@ -32,7 +32,7 @@ class WeightTable : public EvaluationFunction {
      * @throw std::invalid_argument if `state` and the weight table have
      *      different size
      */
-    int64_t operator()(const GameState &state) override;
+    int64_t operator()(const GameState &state) const override;
 
  protected:
     /**

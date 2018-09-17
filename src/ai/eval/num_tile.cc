@@ -8,7 +8,7 @@ namespace ai {
 namespace eval {
 
 // operator()
-int64_t NumTile::operator()(const GameState &state) {
+int64_t NumTile::operator()(const GameState &state) const {
     int64_t sum = 0;
     for (uint32_t r = 0; r < state.height(); r++)
         for (uint32_t c = 0; c < state.width(); c++) {
