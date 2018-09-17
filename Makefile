@@ -59,6 +59,8 @@ H_UI_NCURSESCONTROLLER += $(H_GAME_STATE) $(H_PLAYER) $(H_UI_NCURSESVIEWER)
 H_AI_RANDOMGENERATOR = ai/random_generator $(H_GENERATOR)
 H_AI_RANDOMPLAYER = ai/random_player $(H_PLAYER)
 H_AI_EVAL_EVALFUNC = ai/eval/eval_func $(H_GAME_STATE)
+H_AI_EVAL_NUMTILE = ai/eval/num_tile $(H_AI_EVAL_EVALFUNC)
+H_AI_EVAL_SUMEXPONENTS = ai/eval/sum_exponents $(H_AI_EVAL_EVALFUNC)
 H_AI_EVAL_WEIGHTTABLE_WEIGHTTABLE  = ai/eval/weight_table/weight_table
 H_AI_EVAL_WEIGHTTABLE_WEIGHTTABLE += $(H_AI_EVAL_EVALFUNC)
 H_AI_EVAL_WEIGHTTABLE_GRADIENTLINEAR4X4  = ai/eval/weight_table/gradient_linear_4x4
@@ -83,8 +85,10 @@ $(eval $(call BUILD_RULE, RANDOM_OBJS, ai/random_generator, $(_H)))
 _H = $(H_AI_RANDOMPLAYER)
 $(eval $(call BUILD_RULE, RANDOM_OBJS, ai/random_player, $(_H)))
 
+$(eval $(call BUILD_RULE, BOTS_OBJS, ai/eval/num_tile, $(H_AI_EVAL_NUMTILE)))
+$(eval $(call BUILD_RULE, BOTS_OBJS, ai/eval/sum_exponents, $(H_AI_EVAL_SUMEXPONENTS)))
 _S = ai/eval/weight_table/weight_table
-_H = $(H_AI_WEIGHT_TABLE_EVALUATOR)
+_H = $(H_AI_EVAL_WEIGHTTABLE_WEIGHTTABLE)
 $(eval $(call BUILD_RULE, BOTS_OBJS, $(_S), $(_H)))
 _S = ai/eval/weight_table/gradient_linear_4x4
 _H = $(H_AI_EVAL_WEIGHTTABLE_GRADIENTLINEAR4X4)
@@ -137,7 +141,7 @@ $(BINDIR)/ncurses/2048_random : $(_DEPS)
 ### Tests
 
 AUTO_TESTS  = tile grid game_state game
-AUTO_TESTS += ai/eval/eval_func
+AUTO_TESTS += ai/eval/eval_func ai/eval/num_tile ai/eval/sum_exponents
 AUTO_TESTS += ai/eval/weight_table/gradient_linear_4x4
 AUTO_TESTS += ai/eval/weight_table/gradient_exponential_4x4
 AUTO_TESTS += ai/eval/weight_table/zigzag_linear_4x4
