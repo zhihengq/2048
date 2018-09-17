@@ -60,16 +60,16 @@ void NcursesViewer::dimension(uint32_t &height,
 
 
 // get status line
-const std::string &NcursesViewer::GetStatusLine() const noexcept {
+const std::u32string &NcursesViewer::GetStatusLine() const noexcept {
     return status_;
 }
 
 // set status line
-void NcursesViewer::SetStatusLine(const std::string &status) noexcept {
+void NcursesViewer::SetStatusLine(const std::u32string &status) noexcept {
     status_ = status;
     Redraw();
 }
-void NcursesViewer::SetStatusLine(std::string &&status) noexcept {
+void NcursesViewer::SetStatusLine(std::u32string &&status) noexcept {
     status_ = std::move(status);
     Redraw();
 }
@@ -180,7 +180,8 @@ void NcursesViewer::Redraw() noexcept {
 
     // draw status line
     move(scr_height - 1, 0);
-    addstr(status_.c_str());
+    for (char32_t c : status_)
+        addch(c);
 
     refresh();
 }

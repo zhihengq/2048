@@ -41,15 +41,15 @@ class NcursesViewer : public Viewer {
      * Get the status line string.
      * @return the status line string
      */
-    virtual const std::string &GetStatusLine() const noexcept;
+    virtual const std::u32string &GetStatusLine() const noexcept;
 
     /**
      * Set the status line string.
      * @param status the status line string
      */
     //@{
-    virtual void SetStatusLine(const std::string &status) noexcept;
-    virtual void SetStatusLine(std::string &&status) noexcept;
+    virtual void SetStatusLine(const std::u32string &status) noexcept;
+    virtual void SetStatusLine(std::u32string &&status) noexcept;
     //@}
 
  protected:
@@ -57,7 +57,7 @@ class NcursesViewer : public Viewer {
     static std::unique_ptr<NcursesViewer> instance_;
 
     std::unique_ptr<GameState> saved_state_;    /**< The last updated state */
-    std::string status_;                        /**< The status line string */
+    std::u32string status_;                     /**< The status line string */
     void (*saved_handler_)(int);        /**< The original SIGWINCH handler */
     bool redrawing_;                            /**< Locked during redrawing */
 
